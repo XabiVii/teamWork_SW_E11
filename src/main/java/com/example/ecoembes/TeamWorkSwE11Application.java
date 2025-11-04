@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.ecoembes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TeamWorkSwE11Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TeamWorkSwE11Application.class, args); //commit asier
+		SpringApplication.run(TeamWorkSwE11Application.class, args);
 	}
 
 }
