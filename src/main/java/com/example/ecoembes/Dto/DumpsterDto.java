@@ -1,11 +1,12 @@
-package com.example.ecoembes.entity;
+package com.example.ecoembes.Dto;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-public class Dumpster {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+import com.example.ecoembes.entity.Dumpster;
+
+public class DumpsterDto {
+
     private Long id;
     private String location;
     private int postalCode;
@@ -13,22 +14,13 @@ public class Dumpster {
     private int currentFill;
     private String fillLevel;
 
-    // Default constructor (nécessaire pour la désérialisation JSON)
-    public Dumpster() { }
-
-    public Dumpster(Long id, String location, int postalCode, int capacity, int currentFill) {
+    public DumpsterDto(Long id, String location, int postalCode, int capacity, int currentFill, String fillLevel) {
         this.id = id;
         this.location = location;
         this.postalCode = postalCode;
         this.capacity = capacity;
         this.currentFill = currentFill;
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("Capacity must be greater than zero");
-        }
-        if (currentFill < 0 || currentFill > capacity) {
-            throw new IllegalArgumentException("Current fill must be between 0 and capacity");
-        }
-        calculateFillLevel();
+        this.fillLevel = fillLevel;
     }
 
     public Long getId() {
@@ -78,13 +70,23 @@ public class Dumpster {
     public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
     }
-    
-    public void calculateFillLevel() {
 
-        switch ((int) ((double) this.currentFill * 3 / this.capacity)) {
-	        case 0 -> this.fillLevel = "GREEN";
-	        case 1 -> this.fillLevel = "ORANGE";
-	        case 2, 3 -> this.fillLevel = "RED";
+    public static DumpsterDto Map(Dumpster dumpster) {
+        return new DumpsterDto(
+                dumpster.getId(),
+                dumpster.getLocation(),
+                dumpster.getPostalCode(),
+                dumpster.getCapacity(),
+                dumpster.getCurrentFill(),
+                dumpster.getFillLevel()
+        );
+    }
+
+    public static List<DumpsterDto> Map(List<Dumpster> dumpsters) {
+        List<DumpsterDto> dumpstersDto = new ArrayList<>();
+        for (Dumpster dumpster : dumpsters) {
+            dumpstersDto.add(Map(dumpster));
         }
+        return dumpstersDto;
     }
 }
