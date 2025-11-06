@@ -1,52 +1,61 @@
 package com.example.ecoembes.entity;
 
-import java.sql.Date;
-
 public class UsageRecord {
-    private Dumpster dumpster;
-    private Date date;
-    private int containerUsed;
-    private int fillLevel;
 
-    // Default constructor (nécessaire pour la désérialisation JSON)
-    public UsageRecord() { }
+    private int dumpsterId;
+    private String date;
+    private int estimatedNumCont;
+    private String fillLevel;
 
-    public UsageRecord(Dumpster dumpster, Date date, int containerUsed, int fillLevel) {
-        this.dumpster = dumpster;
+    public UsageRecord() {
+    }
+
+    public UsageRecord(int dumpsterId, String date, int estimatedNumCont, String fillLevel) {
+        this.dumpsterId = dumpsterId;
         this.date = date;
-        this.containerUsed = containerUsed;
+        this.estimatedNumCont = estimatedNumCont;
         this.fillLevel = fillLevel;
     }
 
-    public Dumpster getDumpster() {
-        return dumpster;
+    public int getDumpsterId() {
+        return dumpsterId;
     }
 
-    public void setDumpster(Dumpster dumpster) {
-        this.dumpster = dumpster;
+    public void setDumpsterId(int dumpsterId) {
+        this.dumpsterId = dumpsterId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public int getContainerUsed() {
-        return containerUsed;
+    public int getEstimatedNumCont() {
+        return estimatedNumCont;
     }
 
-    public void setContainerUsed(int containerUsed) {
-        this.containerUsed = containerUsed;
+    public void setEstimatedNumCont(int estimatedNumCont) {
+        this.estimatedNumCont = estimatedNumCont;
     }
 
-    public int getFillLevel() {
+    public String getFillLevel() {
         return fillLevel;
     }
 
-    public void setFillLevel(int fillLevel) {
+    public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "UsageRecord{" +
+                "dumpsterId=" + dumpsterId +
+                ", date='" + date + '\'' +
+                ", estimatedNumCont=" + estimatedNumCont +
+                ", fillLevel='" + fillLevel + '\'' +
+                '}';
     }
 }

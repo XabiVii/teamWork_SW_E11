@@ -1,27 +1,27 @@
 package com.example.ecoembes.entity;
 
 public class Employee {
-	private Long id;
-	private String name;
-	private String email;
-	private String password;
-	private String token;
 
-	// Default constructor is needed to deserialize JSON
-	public Employee() { }
-	
-	public Employee(Long id, String name, String email, String password) {
+    private int id;
+    private String name;
+    private String email;
+    private String role;
+
+    public Employee() {
+    }
+
+    public Employee(int id, String name, String email, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = password;
-	}
+        this.role = role;
+    }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,19 +41,21 @@ public class Employee {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
