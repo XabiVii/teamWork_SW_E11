@@ -1,4 +1,4 @@
-package com.example.ecoembes.repository;	
+package com.example.ecoembes.dao;	
 
 import java.util.List;
 

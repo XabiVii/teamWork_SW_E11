@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.entity.Dumpster;
-import com.example.ecoembes.repository.DumpsterRepository;
 
 @Service
 public class DumpsterService {

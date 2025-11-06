@@ -1,8 +1,9 @@
-package com.example.ecoembes.repository;
+package com.example.ecoembes;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.entity.Dumpster;
 
 @Component
