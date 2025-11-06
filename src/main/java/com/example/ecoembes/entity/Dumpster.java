@@ -1,29 +1,41 @@
 package com.example.ecoembes.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Dumpster {
-
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int postalCode;
+    private int capacity;
+    private int currentFill;
+    private String fillLevel;
     private String address;
-    private String postalCode;
-    private String fillLevel; // LOW, MEDIUM, HIGH
-    private int estimatedNumCont;
 
-    public Dumpster() {
-    }
+	// Default constructor is needed to deserialize JSON
+	public Dumpster() { }
 
-    public Dumpster(int id, String address, String postalCode, String fillLevel, int estimatedNumCont) {
+    public Dumpster(Long id, String address, int postalCode, int capacity, int currentFill) {
         this.id = id;
         this.address = address;
         this.postalCode = postalCode;
-        this.fillLevel = fillLevel;
-        this.estimatedNumCont = estimatedNumCont;
+        this.capacity = capacity;
+        this.currentFill = currentFill;
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity must be greater than zero");
+        }
+        if (currentFill < 0 || currentFill > capacity) {
+            throw new IllegalArgumentException("Current fill must be between 0 and capacity");
+        }
+        calculateFillLevel();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -35,11 +47,11 @@ public class Dumpster {
         this.address = address;
     }
 
-    public String getPostalCode() {
+    public int getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -51,12 +63,20 @@ public class Dumpster {
         this.fillLevel = fillLevel;
     }
 
-    public int getEstimatedNumCont() {
-        return estimatedNumCont;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setEstimatedNumCont(int estimatedNumCont) {
-        this.estimatedNumCont = estimatedNumCont;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCurrentFill() {
+        return currentFill;
+    }
+
+    public void setCurrentFill(int currentFill) {
+        this.currentFill = currentFill;
     }
 
     @Override
@@ -66,7 +86,15 @@ public class Dumpster {
                 ", address='" + address + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", fillLevel='" + fillLevel + '\'' +
-                ", estimatedNumCont=" + estimatedNumCont +
                 '}';
+    }
+    
+    public void calculateFillLevel() {
+
+        switch ((int) ((double) this.currentFill * 3 / this.capacity)) {
+	        case 0 -> this.fillLevel = "GREEN";
+	        case 1 -> this.fillLevel = "ORANGE";
+	        case 2, 3 -> this.fillLevel = "RED";
+        }
     }
 }

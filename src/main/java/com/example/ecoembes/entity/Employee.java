@@ -1,27 +1,39 @@
 package com.example.ecoembes.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Employee {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String name;
+	private String email;
+	private String password;
 
-    private int id;
-    private String name;
-    private String email;
-    private String role;
-
-    public Employee() {
-    }
-
-    public Employee(int id, String name, String email, String role) {
+	// Default constructor is needed to deserialize JSON
+	public Employee() { }
+	
+	public Employee(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.role = role;
-    }
+        this.password = password;
+	}
+	
+	// Check if a password is correct
+	public boolean checkPassword(String password) {
+        return this.password.equals(password);
+	}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,21 +53,12 @@ public class Employee {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
                 '}';
     }
 }
