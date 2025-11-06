@@ -8,15 +8,15 @@ import com.example.ecoembes.entity.Dumpster;
 public class DumpsterDto {
 
     private Long id;
-    private String location;
+    private String address;
     private int postalCode;
     private int capacity;
     private int currentFill;
     private String fillLevel;
 
-    public DumpsterDto(Long id, String location, int postalCode, int capacity, int currentFill, String fillLevel) {
+    public DumpsterDto(Long id, String address, int postalCode, int capacity, int currentFill, String fillLevel) {
         this.id = id;
-        this.location = location;
+        this.address = address;
         this.postalCode = postalCode;
         this.capacity = capacity;
         this.currentFill = currentFill;
@@ -31,12 +31,12 @@ public class DumpsterDto {
         this.id = id;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getPostalCode() {
@@ -74,7 +74,7 @@ public class DumpsterDto {
     public static DumpsterDto Map(Dumpster dumpster) {
         return new DumpsterDto(
                 dumpster.getId(),
-                dumpster.getLocation(),
+                dumpster.getAddress(),
                 dumpster.getPostalCode(),
                 dumpster.getCapacity(),
                 dumpster.getCurrentFill(),

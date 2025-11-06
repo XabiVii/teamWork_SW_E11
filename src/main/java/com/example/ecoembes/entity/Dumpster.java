@@ -7,19 +7,13 @@ public class Dumpster {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String location;
     private int postalCode;
     private int capacity;
     private int currentFill;
     private String fillLevel;
-
-    private int id;
     private String address;
-    private String postalCode;
-    private String fillLevel; // LOW, MEDIUM, HIGH
-    private int estimatedNumCont;
 
-    public Dumpster(Long id, String location, int postalCode, int capacity, int currentFill) {
+    public Dumpster(Long id, String address, int postalCode, int capacity, int currentFill) {
         this.id = id;
         this.address = address;
         this.postalCode = postalCode;
@@ -34,11 +28,11 @@ public class Dumpster {
         calculateFillLevel();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,11 +44,11 @@ public class Dumpster {
         this.address = address;
     }
 
-    public String getPostalCode() {
+    public int getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -66,12 +60,20 @@ public class Dumpster {
         this.fillLevel = fillLevel;
     }
 
-    public int getEstimatedNumCont() {
-        return estimatedNumCont;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public void setEstimatedNumCont(int estimatedNumCont) {
-        this.estimatedNumCont = estimatedNumCont;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCurrentFill() {
+        return currentFill;
+    }
+
+    public void setCurrentFill(int currentFill) {
+        this.currentFill = currentFill;
     }
 
     @Override
@@ -81,7 +83,6 @@ public class Dumpster {
                 ", address='" + address + '\'' +
                 ", postalCode='" + postalCode + '\'' +
                 ", fillLevel='" + fillLevel + '\'' +
-                ", estimatedNumCont=" + estimatedNumCont +
                 '}';
     }
     
