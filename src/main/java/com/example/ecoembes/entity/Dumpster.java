@@ -13,6 +13,9 @@ public class Dumpster {
     private String fillLevel;
     private String address;
 
+	// Default constructor is needed to deserialize JSON
+	public Dumpster() { }
+
     public Dumpster(Long id, String address, int postalCode, int capacity, int currentFill) {
         this.id = id;
         this.address = address;
