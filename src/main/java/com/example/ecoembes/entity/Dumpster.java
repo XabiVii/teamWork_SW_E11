@@ -13,12 +13,15 @@ public class Dumpster {
     private int currentFill;
     private String fillLevel;
 
-    // Default constructor (nécessaire pour la désérialisation JSON)
-    public Dumpster() { }
+    private int id;
+    private String address;
+    private String postalCode;
+    private String fillLevel; // LOW, MEDIUM, HIGH
+    private int estimatedNumCont;
 
     public Dumpster(Long id, String location, int postalCode, int capacity, int currentFill) {
         this.id = id;
-        this.location = location;
+        this.address = address;
         this.postalCode = postalCode;
         this.capacity = capacity;
         this.currentFill = currentFill;
@@ -31,44 +34,28 @@ public class Dumpster {
         calculateFillLevel();
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getCurrentFill() {
-        return currentFill;
-    }
-
-    public void setCurrentFill(int currentFill) {
-        this.currentFill = currentFill;
     }
 
     public String getFillLevel() {
@@ -77,6 +64,25 @@ public class Dumpster {
 
     public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
+    }
+
+    public int getEstimatedNumCont() {
+        return estimatedNumCont;
+    }
+
+    public void setEstimatedNumCont(int estimatedNumCont) {
+        this.estimatedNumCont = estimatedNumCont;
+    }
+
+    @Override
+    public String toString() {
+        return "Dumpster{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", fillLevel='" + fillLevel + '\'' +
+                ", estimatedNumCont=" + estimatedNumCont +
+                '}';
     }
     
     public void calculateFillLevel() {

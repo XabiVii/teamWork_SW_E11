@@ -1,33 +1,50 @@
 package com.example.ecoembes.entity;
 
-import java.sql.Date;
-import java.util.List;
-
 public class SaturationAlert {
-    private Date date;
-    private List<String> affectedZones;
 
-    // Default constructor (nécessaire pour la désérialisation JSON)
-    public SaturationAlert() { }
+    private String date;
+    private String zone;
+    private String saturationLevel; // LOW, MEDIUM, HIGH
 
-    public SaturationAlert(Date date, List<String> affectedZones) {
-        this.date = date;
-        this.affectedZones = affectedZones;
+    public SaturationAlert() {
     }
 
-    public Date getDate() {
+    public SaturationAlert(String date, String zone, String saturationLevel) {
+        this.date = date;
+        this.zone = zone;
+        this.saturationLevel = saturationLevel;
+    }
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public List<String> getAffectedZones() {
-        return affectedZones;
+    public String getZone() {
+        return zone;
     }
 
-    public void setAffectedZones(List<String> affectedZones) {
-        this.affectedZones = affectedZones;
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    public String getSaturationLevel() {
+        return saturationLevel;
+    }
+
+    public void setSaturationLevel(String saturationLevel) {
+        this.saturationLevel = saturationLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Saturation{" +
+                "date='" + date + '\'' +
+                ", zone='" + zone + '\'' +
+                ", saturationLevel='" + saturationLevel + '\'' +
+                '}';
     }
 }
