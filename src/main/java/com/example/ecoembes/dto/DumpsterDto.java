@@ -1,4 +1,4 @@
-package com.example.ecoembes.Dto;
+package com.example.ecoembes.dto;
 
 import java.util.ArrayList;
 import java.util.List;
