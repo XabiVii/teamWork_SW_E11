@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -47,10 +48,30 @@ public class DumpsterController {
     	List<Dumpster> dumpsters = dumpsterService.getAllDumpsters();
         return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }  
+
+    // create new Dumpster
+    @PostMapping()
+    public ResponseEntity<DumpsterDto> CreateDumpster(
+	@Parameter(name = "Dumpster", description = "Dumpster", required = true)
+	@RequestBody DumpsterDto dumpster,
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Authorization token in plain text", required = true)
+	@RequestHeader("Token") String token) {
+        try {
+        	Employee employee = authService.getEmployeeByToken(token);
+	    	
+	    	if (employee == null) {
+	    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	    	}
+            Dumpster createDumpster = dumpsterService.createDumpster(dumpster.Map());
+            return new ResponseEntity<>(DumpsterDto.Map(createDumpster), HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
     
     // update dumpster info
     @PutMapping("/{DumpsterId}/dump_info")
-    public ResponseEntity<DumpsterDto> updateOrderStatus(
+    public ResponseEntity<DumpsterDto> updateDumpsterInfo(
 	@Parameter(name = "DumpsterId", description = "Id of the dumpster", required = true, example = "1")
 	@PathVariable("DumpsterId") long id,
 	@Parameter(name = "currentFill", description = "CurrentFill", required = true, example = "100")

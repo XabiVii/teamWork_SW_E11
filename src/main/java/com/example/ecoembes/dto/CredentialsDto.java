@@ -1,6 +1,6 @@
 package com.example.ecoembes.dto;
 
-public class CredentialsDTO {
+public class CredentialsDto {
 	private String email;
 	private String password;
 

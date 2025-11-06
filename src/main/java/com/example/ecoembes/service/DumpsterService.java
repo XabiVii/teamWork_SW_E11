@@ -28,4 +28,8 @@ public class DumpsterService {
             return repository.save(dumpster);
         });
     }
+    
+    public Dumpster createDumpster(Dumpster dumpster){
+    	return repository.save(dumpster);
+    }
 }

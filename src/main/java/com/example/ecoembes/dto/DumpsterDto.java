@@ -13,6 +13,8 @@ public class DumpsterDto {
     private int capacity;
     private int currentFill;
     private String fillLevel;
+    
+    public DumpsterDto() {}
 
     public DumpsterDto(Long id, String address, int postalCode, int capacity, int currentFill, String fillLevel) {
         this.id = id;
@@ -79,6 +81,16 @@ public class DumpsterDto {
                 dumpster.getCapacity(),
                 dumpster.getCurrentFill(),
                 dumpster.getFillLevel()
+        );
+    }
+
+    public Dumpster Map() {
+        return new Dumpster(
+    	    this.id,
+	        this.address,
+	        this.postalCode,
+	        this.capacity,
+	        this.currentFill
         );
     }
 
