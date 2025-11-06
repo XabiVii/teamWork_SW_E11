@@ -1,22 +1,28 @@
 package com.example.ecoembes;
 
+import java.time.LocalDate;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.EmployeeRepository;
+import com.example.ecoembes.dao.UsageRecordRepository;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.UsageRecord;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
     private final DumpsterRepository dumpstyerRepository;
     private final EmployeeRepository employeeRepository;
+    private final UsageRecordRepository usageRecordRepository;
 
-    public DatabaseInitializer(DumpsterRepository dumpstyerRepository, EmployeeRepository employeeRepository) {
+    public DatabaseInitializer(DumpsterRepository dumpstyerRepository, EmployeeRepository employeeRepository, UsageRecordRepository usageRecordRepository) {
         this.dumpstyerRepository = dumpstyerRepository;
         this.employeeRepository = employeeRepository;
+        this.usageRecordRepository = usageRecordRepository;
     }
 
     @Override
@@ -37,6 +43,15 @@ public class DatabaseInitializer implements CommandLineRunner {
         employeeRepository.save(new Employee(null, "Lucía Fernández", "lucia.fernandez@ecoembes.com", "eco2025"));
         employeeRepository.save(new Employee(null, "Miguel Torres", "miguel.torres@ecoembes.com", "recycle!"));
         employeeRepository.save(new Employee(null, "Laura Pérez", "laura.perez@ecoembes.com", "greenEarth"));
-    
-    }
+        
+        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-01"), 45, "Medium"));
+        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-02"), 50, "High"));
+        usageRecordRepository.save(new UsageRecord(2L, LocalDate.parse("2025-11-01"), 25, "Low"));
+        usageRecordRepository.save(new UsageRecord(3L, LocalDate.parse("2025-11-01"), 40, "Medium"));
+        usageRecordRepository.save(new UsageRecord(3L, LocalDate.parse("2025-11-03"), 70, "High"));
+        usageRecordRepository.save(new UsageRecord(5L, LocalDate.parse("2025-11-02"), 60, "High"));
+        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "Medium"));
+        usageRecordRepository.save(new UsageRecord(9L, LocalDate.parse("2025-11-04"), 20, "Low"));
+        usageRecordRepository.save(new UsageRecord(10L, LocalDate.parse("2025-11-05"), 90, "Critical"));
+        }
 }

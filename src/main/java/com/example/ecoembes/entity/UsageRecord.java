@@ -1,36 +1,30 @@
 package com.example.ecoembes.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class UsageRecord {
 
-    private int dumpsterId;
-    private String date;
+    @EmbeddedId
+    private UsageRecordId id;
+
     private int estimatedNumCont;
     private String fillLevel;
 
-    public UsageRecord() {
-    }
+    public UsageRecord() {}
 
-    public UsageRecord(int dumpsterId, String date, int estimatedNumCont, String fillLevel) {
-        this.dumpsterId = dumpsterId;
-        this.date = date;
+    public UsageRecord(Long dumpsterId, java.time.LocalDate date, int estimatedNumCont, String fillLevel) {
+        this.id = new UsageRecordId(dumpsterId, date);
         this.estimatedNumCont = estimatedNumCont;
         this.fillLevel = fillLevel;
     }
 
-    public int getDumpsterId() {
-        return dumpsterId;
+    public UsageRecordId getId() {
+        return id;
     }
 
-    public void setDumpsterId(int dumpsterId) {
-        this.dumpsterId = dumpsterId;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setId(UsageRecordId id) {
+        this.id = id;
     }
 
     public int getEstimatedNumCont() {
@@ -47,15 +41,5 @@ public class UsageRecord {
 
     public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "UsageRecord{" +
-                "dumpsterId=" + dumpsterId +
-                ", date='" + date + '\'' +
-                ", estimatedNumCont=" + estimatedNumCont +
-                ", fillLevel='" + fillLevel + '\'' +
-                '}';
     }
 }

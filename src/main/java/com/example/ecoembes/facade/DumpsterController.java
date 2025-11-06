@@ -1,5 +1,6 @@
 package com.example.ecoembes.facade;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecoembes.dto.DumpsterDto;
+import com.example.ecoembes.dto.UsageRecordDto;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.UsageRecord;
 import com.example.ecoembes.service.AuthService;
 import com.example.ecoembes.service.DumpsterService;
 
@@ -93,6 +97,33 @@ public class DumpsterController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{dumpsterId}/usage")
+    public ResponseEntity<?> getDumpsterUsage(
+        @Parameter(name = "dumpsterId", description = "Id of the dumpster", required = true, example = "1")
+        @PathVariable("dumpsterId") long dumpsterId,
+        @Parameter(name = "start_date", description = "Start date (yyyy-MM-dd)", required = true, example = "2025-10-30")
+        @RequestParam("start_date") LocalDate startDate,
+        @Parameter(name = "end_date", description = "End date (yyyy-MM-dd)", required = true, example = "2025-10-31")
+        @RequestParam("end_date") LocalDate endDate,
+        @RequestHeader("Token") String token
+    ) {
+        Employee employee = authService.getEmployeeByToken(token);
+
+        if (employee == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Optional<Dumpster> dumpsterOpt = dumpsterService.getDumpsterById(dumpsterId);
+        if (dumpsterOpt.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        List<UsageRecord> usageRecords = dumpsterService.getUsageBetweenDates(dumpsterId, startDate, endDate);
+
+
+        return new ResponseEntity<>(UsageRecordDto.Map(usageRecords), usageRecords.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
 
 }

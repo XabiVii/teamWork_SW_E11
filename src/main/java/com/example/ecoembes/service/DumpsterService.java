@@ -1,35 +1,49 @@
 package com.example.ecoembes.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.ecoembes.dao.DumpsterRepository;
+import com.example.ecoembes.dao.UsageRecordRepository;
 import com.example.ecoembes.entity.Dumpster;
+import com.example.ecoembes.entity.UsageRecord;
 
 @Service
 public class DumpsterService {
 
-    private final DumpsterRepository repository;
+    private final DumpsterRepository dumpsterRepository;
+    private final UsageRecordRepository usageRecordRepository;
 
-    public DumpsterService(DumpsterRepository repository) {
-        this.repository = repository;
+    public DumpsterService(DumpsterRepository repository, UsageRecordRepository usageRecordRepository) {
+        this.dumpsterRepository = repository;
+        this.usageRecordRepository = usageRecordRepository;
     }
 
     public List<Dumpster> getAllDumpsters() {
-        return repository.findAll();
+        return dumpsterRepository.findAll();
+    }
+
+    public Optional<Dumpster> getDumpsterById(Long id) {
+        return dumpsterRepository.findById(id);
+    }
+    
+    public List<UsageRecord> getUsageBetweenDates(Long dumpsterId, LocalDate startDate, LocalDate endDate){
+    	
+        return usageRecordRepository.findByIdDumpsterIdAndIdDateBetween(dumpsterId, startDate, endDate);
     }
 
     public Optional<Dumpster> updateDumpsterInfo(Long id, int currentFill) {
-        return repository.findById(id).map(dumpster -> {
+        return dumpsterRepository.findById(id).map(dumpster -> {
             dumpster.setCurrentFill(currentFill);
             dumpster.calculateFillLevel();
-            return repository.save(dumpster);
+            return dumpsterRepository.save(dumpster);
         });
     }
     
     public Dumpster createDumpster(Dumpster dumpster){
-    	return repository.save(dumpster);
+    	return dumpsterRepository.save(dumpster);
     }
 }
