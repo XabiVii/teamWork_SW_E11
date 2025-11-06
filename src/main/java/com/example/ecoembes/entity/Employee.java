@@ -1,6 +1,14 @@
 package com.example.ecoembes.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Employee {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String email;
@@ -14,6 +22,11 @@ public class Employee {
         this.name = name;
         this.email = email;
         this.password = password;
+	}
+	
+	// Check if a password is correct
+	public boolean checkPassword(String password) {
+        return this.password.equals(password);
 	}
 
     public Long getId() {

@@ -9,35 +9,61 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecoembes.dto.DumpsterDto;
 import com.example.ecoembes.entity.Dumpster;
+import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.service.AuthService;
 import com.example.ecoembes.service.DumpsterService;
+
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/dumpsters")
 public class DumpsterController {
 
     private final DumpsterService dumpsterService;
+	private final AuthService authService;
 
-    public DumpsterController(DumpsterService dumpsterService) {
+    public DumpsterController(DumpsterService dumpsterService, AuthService authService) {
         this.dumpsterService = dumpsterService;
+		this.authService = authService;
     }
 
 
     // Get all dumpsters
     @GetMapping
-    public ResponseEntity<List<DumpsterDto>> getAllDumpsters() {        
+    public ResponseEntity<List<DumpsterDto>> getAllDumpsters(
+    	    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Authorization token in plain text", required = true)
+    	    @RequestHeader("Token") String token) {    
+    	Employee employee = authService.getEmployeeByToken(token);
+    	
+    	if (employee == null) {
+    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    	}    
     	List<Dumpster> dumpsters = dumpsterService.getAllDumpsters();
         return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }  
     
     // update dumpster info
-    @PutMapping("/{id}/dump_info")
-    public ResponseEntity<DumpsterDto> updateOrderStatus(@PathVariable("id") Long id, @RequestBody int currentFill) {
+    @PutMapping("/{DumpsterId}/dump_info")
+    public ResponseEntity<DumpsterDto> updateOrderStatus(
+	@Parameter(name = "DumpsterId", description = "Id of the dumpster", required = true, example = "1")
+	@PathVariable("DumpsterId") long id,
+	@Parameter(name = "currentFill", description = "CurrentFill", required = true, example = "100")
+	@RequestBody int currentFill,
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Authorization token in plain text", required = true)
+	@RequestHeader("Token") String token) {
         try {
+        	Employee employee = authService.getEmployeeByToken(token);
+	    	
+	    	if (employee == null) {
+	    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	    	}
             Optional<Dumpster> updateDumpster = dumpsterService.updateDumpsterInfo(id, currentFill);
             if (updateDumpster.isPresent()) {
                 return new ResponseEntity<>(DumpsterDto.Map(updateDumpster.get()), HttpStatus.OK);
