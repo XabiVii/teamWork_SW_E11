@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.ecoembes.dao.AssignmentRecordRepository;
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.RecyclingPlantRepository;
 import com.example.ecoembes.dao.UsageRecordRepository;
+import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
 import com.example.ecoembes.entity.RecyclingPlant;
@@ -20,13 +22,16 @@ public class RecyclingPlantService {
     private final RecyclingPlantRepository recyclingPlantRepository;
     private final DumpsterRepository dumpsterRepository;
     private final UsageRecordRepository usageRecordRepository;
+    private final AssignmentRecordRepository assignmentRecordRepository;
 
     public RecyclingPlantService(RecyclingPlantRepository recyclingPlantRepository,
     		DumpsterRepository dumpsterRepository,
-            UsageRecordRepository usageRecordRepository) {
+            UsageRecordRepository usageRecordRepository,
+            AssignmentRecordRepository assignmentRecordRepository) {
         this.recyclingPlantRepository = recyclingPlantRepository;
         this.dumpsterRepository = dumpsterRepository;
         this.usageRecordRepository = usageRecordRepository;
+        this.assignmentRecordRepository = assignmentRecordRepository;
     }
 
 
@@ -65,6 +70,10 @@ public class RecyclingPlantService {
         }
 
         recyclingPlantRepository.save(plant);
+
+        AssignmentRecord record = new AssignmentRecord(employee, plant, dumpsters, totalContainers, date);
+        assignmentRecordRepository.save(record);
+
         return dumpsters;
     }
 }
