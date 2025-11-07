@@ -145,10 +145,5 @@ public class DumpsterController {
 
         return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
-    
-    @PostMapping("/check_saturation")
-    public String checkSaturation() {
-        return dumpsterService.triggerSaturationCheck();
-    }
 
 }
