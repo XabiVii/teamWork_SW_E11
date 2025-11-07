@@ -14,7 +14,7 @@ public class Dumpster {
     private int capacity;
     private int currentFill;
     private String fillLevel;
-    private String address;
+    private String location;
 
     @ManyToOne
     @JoinColumn(name = "recycling_plant_id")
@@ -24,7 +24,7 @@ public class Dumpster {
 
     public Dumpster(Long id, String address, int postalCode, int capacity, int currentFill) {
         this.id = id;
-        this.address = address;
+        this.location = address;
         this.postalCode = postalCode;
         this.capacity = capacity;
         this.currentFill = currentFill;
@@ -40,8 +40,8 @@ public class Dumpster {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getAddress() { return location; }
+    public void setAddress(String address) { this.location = address; }
 
     public int getPostalCode() { return postalCode; }
     public void setPostalCode(int postalCode) { this.postalCode = postalCode; }
@@ -74,7 +74,7 @@ public class Dumpster {
     public String toString() {
         return "Dumpster{" +
                 "id=" + id +
-                ", address='" + address + '\'' +
+                ", address='" + location + '\'' +
                 ", postalCode=" + postalCode +
                 ", fillLevel='" + fillLevel + '\'' +
                 ", assignedPlant=" + (assignedPlant != null ? assignedPlant.getName() : "none") +

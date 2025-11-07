@@ -13,8 +13,6 @@ public class AssignmentRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime timestamp;
-
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -33,27 +31,22 @@ public class AssignmentRecord {
 
     private int totalContainers;
 
-    private LocalDate assignmentDate;
+    private LocalDate date;
 
     public AssignmentRecord() {}
 
     public AssignmentRecord(Employee employee, RecyclingPlant plant, List<Dumpster> dumpsters, int totalContainers, LocalDate assignmentDate) {
-        this.timestamp = LocalDateTime.now();
         this.employee = employee;
         this.plant = plant;
         this.dumpsters = dumpsters;
         this.totalContainers = totalContainers;
-        this.assignmentDate = assignmentDate;
+        this.date = assignmentDate;
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
-    public LocalDateTime getTimestamp() { return timestamp; }
     public Employee getEmployee() { return employee; }
     public RecyclingPlant getPlant() { return plant; }
     public List<Dumpster> getDumpsters() { return dumpsters; }
     public int getTotalContainers() { return totalContainers; }
-    public LocalDate getAssignmentDate() { return assignmentDate; }
-
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
+    public LocalDate getAssignmentDate() { return date; }
 }

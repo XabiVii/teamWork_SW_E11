@@ -13,8 +13,8 @@ public class RecyclingPlant {
 
     private String name;
     private int postalCode;
-    private String address;
-    private int capacity;
+    private String location;
+    private int maxCapacity;
     private int currentFill;
     @OneToMany(mappedBy = "assignedPlant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dumpster> assignedDumpsters = new ArrayList<>();
@@ -24,9 +24,9 @@ public class RecyclingPlant {
     public RecyclingPlant(Long id, String name, String address, int postalCode, int capacity) {
         this.id = id;
         this.name = name;
-        this.address = address;
+        this.location = address;
         this.postalCode = postalCode;
-        this.capacity = capacity;
+        this.maxCapacity = capacity;
         this.currentFill = 0;
     }
 
@@ -39,11 +39,11 @@ public class RecyclingPlant {
     public int getPostalCode() { return postalCode; }
     public void setPostalCode(int postalCode) { this.postalCode = postalCode; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getAddress() { return location; }
+    public void setAddress(String address) { this.location = address; }
 
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public int getCapacity() { return maxCapacity; }
+    public void setCapacity(int capacity) { this.maxCapacity = capacity; }
 
     public int getCurrentFill() { return currentFill; }
     public void setCurrentFill(int currentFill) { this.currentFill = currentFill; }
@@ -82,8 +82,8 @@ public class RecyclingPlant {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", postalCode=" + postalCode +
-                ", address='" + address + '\'' +
-                ", capacity=" + capacity +
+                ", address='" + location + '\'' +
+                ", capacity=" + maxCapacity +
                 ", currentFill=" + currentFill +
                 ", assignedDumpsters=" + assignedDumpsters.size() +
                 '}';
