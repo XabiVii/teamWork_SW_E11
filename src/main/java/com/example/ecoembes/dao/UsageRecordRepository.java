@@ -15,4 +15,6 @@ public interface UsageRecordRepository  extends JpaRepository<UsageRecord, Usage
         LocalDate startDate,
         LocalDate endDate
     );
+    
+    List<UsageRecord> findByIdDate(LocalDate date);
 }

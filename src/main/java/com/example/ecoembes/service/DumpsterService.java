@@ -1,6 +1,8 @@
 package com.example.ecoembes.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,5 +47,35 @@ public class DumpsterService {
     
     public Dumpster createDumpster(Dumpster dumpster){
     	return dumpsterRepository.save(dumpster);
+    }
+    
+    public List<Dumpster> getDumpsterByPostalCodeAndDate(LocalDate date, String postalCode){
+    	List<Dumpster> dumpsters = dumpsterRepository.findAll();
+    	List<Dumpster> results = new ArrayList<Dumpster>();
+    	
+    	for(Dumpster dumpster : dumpsters) {
+    		List<UsageRecord> records = usageRecordRepository.findByIdDate(date);
+    		
+    		UsageRecord latest = records.stream()
+                    .max(Comparator.comparing(r -> r.getId().getDate()))
+                    .orElse(null);
+
+			int latestFill = (latest != null) ? latest.getEstimatedNumCont() : dumpster.getCurrentFill();
+			String fillLevel = (latest != null) ? latest.getFillLevel() : dumpster.getFillLevel();
+			Dumpster updatedDumpster = new Dumpster(
+	                dumpster.getId(),
+	                dumpster.getAddress(),
+	                dumpster.getPostalCode(),
+	                dumpster.getCapacity(),
+	                latestFill
+	        );
+	        updatedDumpster.setCurrentFill(latestFill);
+	        updatedDumpster.setFillLevel(fillLevel);
+
+	        results.add(updatedDumpster);
+    	}
+
+	    return results;
+    	
     }
 }

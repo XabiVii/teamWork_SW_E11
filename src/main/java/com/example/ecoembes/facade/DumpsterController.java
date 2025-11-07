@@ -126,4 +126,26 @@ public class DumpsterController {
         return new ResponseEntity<>(UsageRecordDto.Map(usageRecords), usageRecords.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
 
+    @GetMapping("/status/postal_code")
+    public ResponseEntity<?> getDumpsterUsage(
+        @Parameter(name = "date", description = "date (yyyy-MM-dd)", required = true, example = "2025-10-30")
+        @RequestParam("date") LocalDate date,
+        @Parameter(name = "postal_code", description = "postal code", required = true, example = "86000")
+        @RequestParam("postal_code") String postalCode,
+        @RequestHeader("Token") String token
+    ) {
+        Employee employee = authService.getEmployeeByToken(token);
+
+        if (employee == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        
+        List<Dumpster> dumpsters = dumpsterService.getDumpsterByPostalCodeAndDate(date, postalCode);
+
+
+        return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
+    }
+    
+    
+
 }

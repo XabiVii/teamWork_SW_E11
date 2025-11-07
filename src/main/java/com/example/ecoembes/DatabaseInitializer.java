@@ -44,14 +44,15 @@ public class DatabaseInitializer implements CommandLineRunner {
         employeeRepository.save(new Employee(null, "Miguel Torres", "miguel.torres@ecoembes.com", "recycle!"));
         employeeRepository.save(new Employee(null, "Laura Pérez", "laura.perez@ecoembes.com", "greenEarth"));
         
-        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-01"), 45, "Medium"));
-        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-02"), 50, "High"));
-        usageRecordRepository.save(new UsageRecord(2L, LocalDate.parse("2025-11-01"), 25, "Low"));
-        usageRecordRepository.save(new UsageRecord(3L, LocalDate.parse("2025-11-01"), 40, "Medium"));
-        usageRecordRepository.save(new UsageRecord(3L, LocalDate.parse("2025-11-03"), 70, "High"));
-        usageRecordRepository.save(new UsageRecord(5L, LocalDate.parse("2025-11-02"), 60, "High"));
-        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "Medium"));
-        usageRecordRepository.save(new UsageRecord(9L, LocalDate.parse("2025-11-04"), 20, "Low"));
-        usageRecordRepository.save(new UsageRecord(10L, LocalDate.parse("2025-11-05"), 90, "Critical"));
+        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-01"), 45, "RED"));
+        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-02"), 50, "RED"));
+        usageRecordRepository.save(new UsageRecord(2L, LocalDate.parse("2025-11-01"), 25, "ORANGE"));
+        usageRecordRepository.save(new UsageRecord(4L, LocalDate.parse("2025-11-01"), 40, "ORANGE"));
+        usageRecordRepository.save(new UsageRecord(4L, LocalDate.parse("2025-11-03"), 70, "ORANGE"));
+        usageRecordRepository.save(new UsageRecord(5L, LocalDate.parse("2025-11-02"), 60, "RED"));
+        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "ORANGE"));
+        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "GREEN"));
+        usageRecordRepository.save(new UsageRecord(9L, LocalDate.parse("2025-11-04"), 20, "GREEN"));
+        usageRecordRepository.save(new UsageRecord(10L, LocalDate.parse("2025-11-05"), 90, "RED"));
         }
 }
