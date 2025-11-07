@@ -10,4 +10,5 @@ import com.example.ecoembes.entity.Dumpster;
 @Repository
 public interface DumpsterRepository extends JpaRepository<Dumpster, Long> { 
     List<Dumpster> findById(int id);
+    List<Dumpster> findByPostalCode(int postalCode);
 }
