@@ -1,20 +1,26 @@
 package com.example.ecoembes.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Dumpster {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private int postalCode;
     private int capacity;
     private int currentFill;
     private String fillLevel;
     private String address;
 
-	// Default constructor is needed to deserialize JSON
-	public Dumpster() { }
+    @ManyToOne
+    @JoinColumn(name = "recycling_plant_id")
+    private RecyclingPlant assignedPlant;
+
+    public Dumpster() { }
 
     public Dumpster(Long id, String address, int postalCode, int capacity, int currentFill) {
         this.id = id;
@@ -31,52 +37,37 @@ public class Dumpster {
         calculateFillLevel();
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public String getAddress() {
-        return address;
-    }
+    public int getPostalCode() { return postalCode; }
+    public void setPostalCode(int postalCode) { this.postalCode = postalCode; }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public String getFillLevel() { return fillLevel; }
+    public void setFillLevel(String fillLevel) { this.fillLevel = fillLevel; }
 
-    public int getPostalCode() {
-        return postalCode;
-    }
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
 
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getFillLevel() {
-        return fillLevel;
-    }
-
-    public void setFillLevel(String fillLevel) {
-        this.fillLevel = fillLevel;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getCurrentFill() {
-        return currentFill;
-    }
-
-    public void setCurrentFill(int currentFill) {
+    public int getCurrentFill() { return currentFill; }
+    public void setCurrentFill(int currentFill) { 
         this.currentFill = currentFill;
+        calculateFillLevel();
+    }
+    
+    public void setAssignedPlant(RecyclingPlant assignedPlant) {
+        this.assignedPlant = assignedPlant;
+    }
+    
+    public void calculateFillLevel() {
+        switch ((int) ((double) this.currentFill * 3 / this.capacity)) {
+            case 0 -> this.fillLevel = "GREEN";
+            case 1 -> this.fillLevel = "ORANGE";
+            case 2, 3 -> this.fillLevel = "RED";
+        }
     }
 
     @Override
@@ -84,17 +75,9 @@ public class Dumpster {
         return "Dumpster{" +
                 "id=" + id +
                 ", address='" + address + '\'' +
-                ", postalCode='" + postalCode + '\'' +
+                ", postalCode=" + postalCode +
                 ", fillLevel='" + fillLevel + '\'' +
+                ", assignedPlant=" + (assignedPlant != null ? assignedPlant.getName() : "none") +
                 '}';
-    }
-    
-    public void calculateFillLevel() {
-
-        switch ((int) ((double) this.currentFill * 3 / this.capacity)) {
-	        case 0 -> this.fillLevel = "GREEN";
-	        case 1 -> this.fillLevel = "ORANGE";
-	        case 2, 3 -> this.fillLevel = "RED";
-        }
     }
 }

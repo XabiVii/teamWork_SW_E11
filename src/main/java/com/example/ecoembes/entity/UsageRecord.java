@@ -11,12 +11,23 @@ public class UsageRecord {
     private int estimatedNumCont;
     private String fillLevel;
 
+    @Column(name = "plant_id", nullable = true)
+    private Long plantId;
+
     public UsageRecord() {}
 
     public UsageRecord(Long dumpsterId, java.time.LocalDate date, int estimatedNumCont, String fillLevel) {
         this.id = new UsageRecordId(dumpsterId, date);
         this.estimatedNumCont = estimatedNumCont;
         this.fillLevel = fillLevel;
+        this.plantId = 0L;
+    }
+
+    public UsageRecord(Long dumpsterId, java.time.LocalDate date, int estimatedNumCont, String fillLevel, Long plantId) {
+        this.id = new UsageRecordId(dumpsterId, date);
+        this.estimatedNumCont = estimatedNumCont;
+        this.fillLevel = fillLevel;
+        this.plantId = plantId;
     }
 
     public UsageRecordId getId() {
@@ -41,5 +52,13 @@ public class UsageRecord {
 
     public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
+    }
+
+    public Long getPlant() {
+        return plantId;
+    }
+
+    public void setPlant(Long plantId) {
+        this.plantId = plantId;
     }
 }

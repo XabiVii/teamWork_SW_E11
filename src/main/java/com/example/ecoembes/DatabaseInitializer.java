@@ -1,6 +1,7 @@
 package com.example.ecoembes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -8,51 +9,76 @@ import org.springframework.stereotype.Component;
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.EmployeeRepository;
 import com.example.ecoembes.dao.UsageRecordRepository;
+import com.example.ecoembes.dao.RecyclingPlantRepository;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.UsageRecord;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
-    private final DumpsterRepository dumpstyerRepository;
+    private final DumpsterRepository dumpsterRepository;
     private final EmployeeRepository employeeRepository;
     private final UsageRecordRepository usageRecordRepository;
+    private final RecyclingPlantRepository recyclingPlantRepository;
 
-    public DatabaseInitializer(DumpsterRepository dumpstyerRepository, EmployeeRepository employeeRepository, UsageRecordRepository usageRecordRepository) {
-        this.dumpstyerRepository = dumpstyerRepository;
+    public DatabaseInitializer(DumpsterRepository dumpsterRepository,
+                               EmployeeRepository employeeRepository,
+                               UsageRecordRepository usageRecordRepository,
+                               RecyclingPlantRepository recyclingPlantRepository) {
+        this.dumpsterRepository = dumpsterRepository;
         this.employeeRepository = employeeRepository;
         this.usageRecordRepository = usageRecordRepository;
+        this.recyclingPlantRepository = recyclingPlantRepository;
     }
 
     @Override
     public void run(String... args) {
-    	dumpstyerRepository.save(new Dumpster(null, "Calle Mayor 12, Bilbao", 48005, 1000, 750));
-    	dumpstyerRepository.save(new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 400));
-    	dumpstyerRepository.save(new Dumpster(null, "Calle Autonomía 200, Bilbao", 48012, 800, 800));
-    	dumpstyerRepository.save(new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 150));
-    	dumpstyerRepository.save(new Dumpster(null, "Gran Vía 15, Bilbao", 48009, 1100, 950));
-    	dumpstyerRepository.save(new Dumpster(null, "Paseo del Arenal 5, Bilbao", 48003, 1000, 500));
-    	dumpstyerRepository.save(new Dumpster(null, "Calle Rodríguez Arias 25, Bilbao", 48010, 700, 300));
-    	dumpstyerRepository.save(new Dumpster(null, "Plaza Moyúa 1, Bilbao", 48009, 1500, 1200));
-    	dumpstyerRepository.save(new Dumpster(null, "Calle Alameda Recalde 56, Bilbao", 48008, 950, 200));
-    	dumpstyerRepository.save(new Dumpster(null, "Puente de Deusto, Bilbao", 48014, 2000, 1800));
-        
-        employeeRepository.save(new Employee(null, "Ana López", "ana.lopez@ecoembes.com", "password123"));
-        employeeRepository.save(new Employee(null, "Carlos García", "carlos.garcia@ecoembes.com", "securePass"));
-        employeeRepository.save(new Employee(null, "Lucía Fernández", "lucia.fernandez@ecoembes.com", "eco2025"));
-        employeeRepository.save(new Employee(null, "Miguel Torres", "miguel.torres@ecoembes.com", "recycle!"));
-        employeeRepository.save(new Employee(null, "Laura Pérez", "laura.perez@ecoembes.com", "greenEarth"));
-        
-        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-01"), 45, "RED"));
-        usageRecordRepository.save(new UsageRecord(1L, LocalDate.parse("2025-11-02"), 50, "RED"));
-        usageRecordRepository.save(new UsageRecord(2L, LocalDate.parse("2025-11-01"), 25, "ORANGE"));
-        usageRecordRepository.save(new UsageRecord(4L, LocalDate.parse("2025-11-01"), 40, "ORANGE"));
-        usageRecordRepository.save(new UsageRecord(4L, LocalDate.parse("2025-11-03"), 70, "ORANGE"));
-        usageRecordRepository.save(new UsageRecord(5L, LocalDate.parse("2025-11-02"), 60, "RED"));
-        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "ORANGE"));
-        usageRecordRepository.save(new UsageRecord(8L, LocalDate.parse("2025-11-01"), 35, "GREEN"));
-        usageRecordRepository.save(new UsageRecord(9L, LocalDate.parse("2025-11-04"), 20, "GREEN"));
-        usageRecordRepository.save(new UsageRecord(10L, LocalDate.parse("2025-11-05"), 90, "RED"));
-        }
+        RecyclingPlant r1 = new RecyclingPlant();
+        r1.setName("PlasSB Ltd.");
+        r1.setAddress("Polígono Industrial 5, Bilbao");
+        r1.setPostalCode(48010);
+        r1.setCapacity(5000);
+
+        RecyclingPlant r2 = new RecyclingPlant();
+        r2.setName("ContSocket Ltd.");
+        r2.setAddress("Calle Industria 23, Bilbao");
+        r2.setPostalCode(48012);
+        r2.setCapacity(4000);
+
+        recyclingPlantRepository.saveAll(Arrays.asList(r1, r2));
+
+        Dumpster d1 = new Dumpster(null, "Calle Mayor 12, Bilbao", 48005, 1000, 750);
+        d1.setAssignedPlant(r1);
+
+        Dumpster d2 = new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 400);
+        d2.setAssignedPlant(r2);
+
+        Dumpster d3 = new Dumpster(null, "Calle Autonomía 200, Bilbao", 48012, 800, 800);
+        d3.setAssignedPlant(r1);
+
+        Dumpster d4 = new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 150);
+
+        Dumpster d5 = new Dumpster(null, "Gran Vía 15, Bilbao", 48009, 1100, 950);
+        d5.setAssignedPlant(r2);
+
+        dumpsterRepository.saveAll(Arrays.asList(d1, d2, d3, d4, d5));
+
+        employeeRepository.saveAll(Arrays.asList(
+            new Employee(null, "Ana López", "ana.lopez@ecoembes.com", "password123"),
+            new Employee(null, "Carlos García", "carlos.garcia@ecoembes.com", "securePass")
+        ));
+
+        usageRecordRepository.saveAll(Arrays.asList(
+            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-01"), 45, "RED", r1.getId()),
+            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-02"), 50, "RED", r1.getId()),
+            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-01"), 25, "ORANGE", r2.getId()),
+            new UsageRecord(d3.getId(), LocalDate.parse("2025-11-03"), 80, "RED", r1.getId()),
+            new UsageRecord(d5.getId(), LocalDate.parse("2025-11-02"), 60, "RED", r2.getId()),
+            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-01"), 40, "ORANGE", null),
+            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-02"), 55, "ORANGE", null),
+            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-03"), 35, "ORANGE", null)
+        ));
+    }
 }
