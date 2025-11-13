@@ -1,6 +1,10 @@
 package com.example.ecoembes.dto;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.example.ecoembes.entity.Dumpster;
+import com.example.ecoembes.entity.Employee;
 
 public class AssignResponseDto {
     private Long plantId;
@@ -47,5 +51,16 @@ public class AssignResponseDto {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+
+    public static AssignResponseDto map(Long plantId, List<Dumpster> dumpsters, Employee employee, LocalDate date) {
+        AssignResponseDto response = new AssignResponseDto();
+        response.setPlantId(plantId);
+        response.setEmployeeId(employee.getId());
+        response.setDumpsterCount(dumpsters.size());
+        response.setTotalContainers(dumpsters.stream().mapToInt(Dumpster::getCurrentFill).sum());
+        response.setDate(date);
+        return response;
     }
 }

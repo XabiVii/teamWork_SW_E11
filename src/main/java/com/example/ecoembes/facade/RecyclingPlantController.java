@@ -75,19 +75,9 @@ public class RecyclingPlantController {
                     employee
             );
 
-            return new ResponseEntity<>(mapToAssignResponseDto(request, dumpsters, employee, date), HttpStatus.OK);
+            return new ResponseEntity<>(AssignResponseDto.map(request.getPlantId(), dumpsters, employee, date), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-    }
-
-    private AssignResponseDto mapToAssignResponseDto(AssignRequestDto request, List<Dumpster> dumpsters, Employee employee, LocalDate date) {
-        AssignResponseDto response = new AssignResponseDto();
-        response.setPlantId(request.getPlantId());
-        response.setEmployeeId(employee.getId());
-        response.setDumpsterCount(dumpsters.size());
-        response.setTotalContainers(dumpsters.stream().mapToInt(Dumpster::getCurrentFill).sum());
-        response.setDate(date);
-        return response;
     }
 }
