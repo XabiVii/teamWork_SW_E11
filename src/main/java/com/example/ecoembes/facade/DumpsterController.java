@@ -75,7 +75,7 @@ public class DumpsterController {
     
     // update dumpster info
     @PutMapping("/{DumpsterId}/dump_info")
-    public ResponseEntity<DumpsterDto> updateDumpsterInfo(
+    public ResponseEntity<?> updateDumpsterInfo(
 	@Parameter(name = "DumpsterId", description = "Id of the dumpster", required = true, example = "1")
 	@PathVariable("DumpsterId") long id,
 	@Parameter(name = "currentFill", description = "CurrentFill", required = true, example = "100")
@@ -90,7 +90,7 @@ public class DumpsterController {
 	    	}
             Optional<Dumpster> updateDumpster = dumpsterService.updateDumpsterInfo(id, currentFill);
             if (updateDumpster.isPresent()) {
-                return new ResponseEntity<>(DumpsterDto.Map(updateDumpster.get()), HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
