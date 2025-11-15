@@ -49,7 +49,16 @@ public class DumpsterService {
         return dumpsterRepository.findById(id).map(dumpster -> {
             dumpster.setCurrentFill(currentFill);
             dumpster.calculateFillLevel();
-            return dumpsterRepository.save(dumpster);
+            Dumpster savedDumpster =  dumpsterRepository.save(dumpster);
+            UsageRecord record = new UsageRecord(
+                    dumpster.getId(),
+                    java.time.LocalDate.now(),
+                    savedDumpster.getCurrentFill(),
+                    savedDumpster.getFillLevel()
+            );
+            usageRecordRepository.save(record);
+
+            return savedDumpster;
         });
     }
     
@@ -57,34 +66,45 @@ public class DumpsterService {
     	return dumpsterRepository.save(dumpster);
     }
     
-    public List<Dumpster> getDumpsterByPostalCodeAndDate(LocalDate date, String postalCode){
-    	List<Dumpster> dumpsters = dumpsterRepository.findAll();
-    	List<Dumpster> results = new ArrayList<Dumpster>();
-    	
-    	for(Dumpster dumpster : dumpsters) {
-    		List<UsageRecord> records = usageRecordRepository.findByIdDate(date);
-    		
-    		UsageRecord latest = records.stream()
-                    .max(Comparator.comparing(r -> r.getId().getDate()))
-                    .orElse(null);
+    public List<Dumpster> getDumpsterByPostalCodeAndDate(LocalDate date, int postalCode) {
+        List<Dumpster> dumpsters = dumpsterRepository.findByPostalCode(postalCode);
+        List<Dumpster> results = new ArrayList<>();
 
-			int latestFill = (latest != null) ? latest.getEstimatedNumCont() : dumpster.getCurrentFill();
-			String fillLevel = (latest != null) ? latest.getFillLevel() : dumpster.getFillLevel();
-			Dumpster updatedDumpster = new Dumpster(
-	                dumpster.getId(),
-	                dumpster.getAddress(),
-	                dumpster.getPostalCode(),
-	                dumpster.getCapacity(),
-	                latestFill
-	        );
-	        updatedDumpster.setCurrentFill(latestFill);
-	        updatedDumpster.setFillLevel(fillLevel);
+        for (Dumpster dumpster : dumpsters) {
+            Optional<UsageRecord> recordOpt = usageRecordRepository
+                    .findByIdDumpsterIdAndIdDate(dumpster.getId(), date)
+                    .stream()
+                    .findFirst();
 
-	        results.add(updatedDumpster);
-    	}
+            int latestFill;
+            String fillLevel;
 
-	    return results;	
+            if (recordOpt.isPresent()) {
+                UsageRecord record = recordOpt.get();
+                latestFill = record.getEstimatedNumCont();
+                fillLevel = record.getFillLevel();
+            } else {
+                latestFill = dumpster.getCurrentFill();
+                fillLevel = dumpster.getFillLevel();
+            }
+
+            Dumpster updatedDumpster = new Dumpster(
+                    dumpster.getId(),
+                    dumpster.getAddress(),
+                    dumpster.getPostalCode(),
+                    dumpster.getCapacity(),
+                    latestFill
+            );
+            updatedDumpster.setCurrentFill(latestFill);
+            updatedDumpster.setFillLevel(fillLevel);
+
+            results.add(updatedDumpster);
+        }
+
+        return results;
     }
+
+    
     @Transactional(readOnly = true)
     public void checkSaturationAndNotify() {
         long total = dumpsterRepository.count();

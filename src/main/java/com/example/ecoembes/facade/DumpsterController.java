@@ -131,7 +131,7 @@ public class DumpsterController {
         @Parameter(name = "date", description = "date (yyyy-MM-dd)", required = true, example = "2025-10-30")
         @RequestParam("date") LocalDate date,
         @Parameter(name = "postal_code", description = "postal code", required = true, example = "86000")
-        @RequestParam("postal_code") String postalCode,
+        @RequestParam("postal_code") int postalCode,
         @RequestHeader("Token") String token
     ) {
         Employee employee = authService.getEmployeeByToken(token);

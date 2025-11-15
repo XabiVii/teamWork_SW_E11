@@ -2,6 +2,7 @@ package com.example.ecoembes.dao;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,4 +19,5 @@ public interface UsageRecordRepository  extends JpaRepository<UsageRecord, Usage
     
     List<UsageRecord> findByIdDate(LocalDate date);
     List<UsageRecord> findByPlantIdAndIdDate(Long plantId, LocalDate date);
+    Optional<UsageRecord> findByIdDumpsterIdAndIdDate(Long dumpsterId, LocalDate date);
 }
