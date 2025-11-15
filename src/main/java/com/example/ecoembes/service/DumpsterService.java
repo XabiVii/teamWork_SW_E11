@@ -131,7 +131,6 @@ public class DumpsterService {
         }
     }
 
-    // automatical verification every 3am
     @Scheduled(cron = "0 0 3 * * *")
     public void scheduledSaturationCheck() {
         checkSaturationAndNotify();

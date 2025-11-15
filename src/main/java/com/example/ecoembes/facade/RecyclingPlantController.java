@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ecoembes.dto.AssignRequestDto;
 import com.example.ecoembes.dto.AssignResponseDto;
 import com.example.ecoembes.entity.Employee;
 import com.example.ecoembes.entity.Dumpster;
@@ -42,23 +43,21 @@ public class RecyclingPlantController {
 
         Employee employee = authService.getEmployeeByToken(token);
 
-        if (employee != null) {
-            Integer remainingCapacity = recyclingPlantService.getRemainingCapacity(plantId, date);
+        if (employee == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
-            if (remainingCapacity == null) {
-                return ResponseEntity.notFound().build();
-            }
+        Integer remainingCapacity = recyclingPlantService.getRemainingCapacity(plantId, date);
+        if (remainingCapacity == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-            return ResponseEntity.ok(remainingCapacity);
-    	} else {
-    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    	}
+        return ResponseEntity.ok(remainingCapacity);
     }
     
-    @PostMapping("/assignDumpsters")
-    public ResponseEntity<AssignResponseDto> assignDumpstersToPlant(
-            @RequestBody Long plantId,
-            @RequestBody Long dumpsterId,
+    @PostMapping("/assignDumpster")
+    public ResponseEntity<AssignResponseDto> assignDumpsterToPlant(
+            @RequestBody AssignRequestDto request,
             @RequestHeader("Token") @Parameter(description = "Authorization token") String token) {
 
         Employee employee = authService.getEmployeeByToken(token);
@@ -69,13 +68,13 @@ public class RecyclingPlantController {
         try {
         	LocalDate date = LocalDate.now();
             Dumpster dumpster = recyclingPlantService.assignDumpsterToPlant(
-            		plantId,
-            		dumpsterId,
+            		request.getPlantId(),
+            		request.getDumpsterId(),
                     date,
                     employee
             );
 
-            return new ResponseEntity<>(AssignResponseDto.map(plantId, dumpster, employee, date), HttpStatus.OK);
+            return new ResponseEntity<>(AssignResponseDto.map(request.getPlantId(), dumpster.getId(), employee, date), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

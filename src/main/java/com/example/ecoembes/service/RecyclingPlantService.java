@@ -41,14 +41,15 @@ public class RecyclingPlantService {
             return null;
         }
 
-        List<UsageRecord> records = usageRecordRepository.findByPlantIdAndIdDate(plantId, date);
-        int usedCapacity = records.stream()
-                                  .mapToInt(UsageRecord::getEstimatedNumCont)
-                                  .sum();
+        int usedCapacity = assignmentRecordRepository
+                .findByPlantIdAndDate(plantId, date)
+                .stream()
+                .mapToInt(AssignmentRecord::getTotalContainers)
+                .sum();
 
         return plant.getCapacity() - usedCapacity;
     }
-
+    
     @Transactional
     public Dumpster assignDumpsterToPlant(Long plantId, Long dumpsterId, LocalDate date, Employee employee) {
         RecyclingPlant plant = recyclingPlantRepository.findById(plantId)
@@ -57,12 +58,17 @@ public class RecyclingPlantService {
         Dumpster dumpster = dumpsterRepository.findById(dumpsterId)
                 .orElseThrow(() -> new IllegalArgumentException("Dumpster not found"));
 
-        if (plant.getCurrentFill() + dumpster.getCurrentFill() > plant.getCapacity()) {
+        int usedCapacity = assignmentRecordRepository
+                .findByPlantIdAndDate(plantId, date)
+                .stream()
+                .mapToInt(AssignmentRecord::getTotalContainers)
+                .sum();
+
+        int remainingCapacity = plant.getCapacity() - usedCapacity;
+
+        if (dumpster.getCurrentFill() > remainingCapacity) {
             throw new IllegalArgumentException("Plant capacity exceeded");
         }
-
-        plant.assignDumpster(dumpster);
-        recyclingPlantRepository.save(plant);
 
         AssignmentRecord record = new AssignmentRecord(employee, plant, dumpster,
                 dumpster.getCurrentFill(), date);
@@ -70,5 +76,6 @@ public class RecyclingPlantService {
 
         return dumpster;
     }
+
 
 }

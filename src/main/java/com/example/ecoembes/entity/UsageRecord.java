@@ -11,24 +11,12 @@ public class UsageRecord {
     private int estimatedNumCont;
     private String fillLevel;
 
-    @ManyToOne
-    @JoinColumn(name = "plant_id", nullable = true)
-    private RecyclingPlant plant;
-
     public UsageRecord() {}
 
     public UsageRecord(Long dumpsterId, java.time.LocalDate date, int estimatedNumCont, String fillLevel) {
         this.id = new UsageRecordId(dumpsterId, date);
         this.estimatedNumCont = estimatedNumCont;
         this.fillLevel = fillLevel;
-        this.plant = null;
-    }
-
-    public UsageRecord(Long dumpsterId, java.time.LocalDate date, int estimatedNumCont, String fillLevel, RecyclingPlant plant) {
-        this.id = new UsageRecordId(dumpsterId, date);
-        this.estimatedNumCont = estimatedNumCont;
-        this.fillLevel = fillLevel;
-        this.plant = plant;
     }
 
     public UsageRecordId getId() {
@@ -53,13 +41,5 @@ public class UsageRecord {
 
     public void setFillLevel(String fillLevel) {
         this.fillLevel = fillLevel;
-    }
-
-    public RecyclingPlant getPlant() {
-        return plant;
-    }
-
-    public void setPlant(RecyclingPlant plant) {
-        this.plant = plant;
     }
 }

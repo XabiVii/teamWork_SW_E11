@@ -71,14 +71,14 @@ public class DatabaseInitializer implements CommandLineRunner {
         ));
 
         usageRecordRepository.saveAll(Arrays.asList(
-            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-01"), 45, "RED", r1),
-            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-02"), 50, "RED", r1),
-            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-01"), 25, "ORANGE", r2),
-            new UsageRecord(d3.getId(), LocalDate.parse("2025-11-03"), 80, "RED", r1),
-            new UsageRecord(d5.getId(), LocalDate.parse("2025-11-02"), 60, "RED", r2),
-            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-01"), 40, "ORANGE", null),
-            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-02"), 55, "ORANGE", null),
-            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-03"), 35, "ORANGE", null)
+            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-01"), 45, "RED"),
+            new UsageRecord(d1.getId(), LocalDate.parse("2025-11-02"), 50, "RED"),
+            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-01"), 25, "ORANGE"),
+            new UsageRecord(d3.getId(), LocalDate.parse("2025-11-03"), 80, "RED"),
+            new UsageRecord(d5.getId(), LocalDate.parse("2025-11-02"), 60, "RED"),
+            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-01"), 40, "ORANGE"),
+            new UsageRecord(d4.getId(), LocalDate.parse("2025-11-02"), 55, "ORANGE"),
+            new UsageRecord(d2.getId(), LocalDate.parse("2025-11-03"), 35, "ORANGE")
         ));
     }
 }

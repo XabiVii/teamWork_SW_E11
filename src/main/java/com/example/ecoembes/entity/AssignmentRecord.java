@@ -3,20 +3,22 @@ package com.example.ecoembes.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
+@IdClass(AssignmentRecordId.class)
 public class AssignmentRecord {
 
+	@Id
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+	@Id
     @ManyToOne
     @JoinColumn(name = "plant_id")
     private RecyclingPlant plant;
 
+	@Id
     @ManyToOne
     @JoinColumn(name = "dumspter_id")
     private Dumpster dumpster;

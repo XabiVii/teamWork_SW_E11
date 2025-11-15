@@ -8,6 +8,7 @@ import com.example.ecoembes.entity.Employee;
 
 public class AssignResponseDto {
     private Long plantId;
+    private Long dumpsterId;
     private Long employeeId;
     private LocalDate date;
 
@@ -17,6 +18,14 @@ public class AssignResponseDto {
 
     public void setPlantId(Long plantId) {
         this.plantId = plantId;
+    }
+
+    public Long getDumpsterId() {
+        return dumpsterId;
+    }
+
+    public void setDumpsterId(Long dumpsterId) {
+        this.dumpsterId = dumpsterId;
     }
 
     public Long getEmployeeId() {
@@ -36,9 +45,10 @@ public class AssignResponseDto {
     }
 
 
-    public static AssignResponseDto map(Long plantId, Dumpster dumpster, Employee employee, LocalDate date) {
+    public static AssignResponseDto map(Long plantId, Long dumpsterId, Employee employee, LocalDate date) {
         AssignResponseDto response = new AssignResponseDto();
         response.setPlantId(plantId);
+        response.setDumpsterId(dumpsterId);
         response.setEmployeeId(employee.getId());
         response.setDate(date);
         return response;
