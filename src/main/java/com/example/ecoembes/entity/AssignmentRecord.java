@@ -9,10 +9,6 @@ import java.util.List;
 @Entity
 public class AssignmentRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -21,13 +17,9 @@ public class AssignmentRecord {
     @JoinColumn(name = "plant_id")
     private RecyclingPlant plant;
 
-    @ManyToMany
-    @JoinTable(
-        name = "assignment_record_dumpsters",
-        joinColumns = @JoinColumn(name = "assignment_record	_id"),
-        inverseJoinColumns = @JoinColumn(name = "dumpster_id")
-    )
-    private List<Dumpster> dumpsters;
+    @ManyToOne
+    @JoinColumn(name = "dumspter_id")
+    private Dumpster dumpster;
 
     private int totalContainers;
 
@@ -35,18 +27,17 @@ public class AssignmentRecord {
 
     public AssignmentRecord() {}
 
-    public AssignmentRecord(Employee employee, RecyclingPlant plant, List<Dumpster> dumpsters, int totalContainers, LocalDate assignmentDate) {
+    public AssignmentRecord(Employee employee, RecyclingPlant plant, Dumpster dumpster, int totalContainers, LocalDate assignmentDate) {
         this.employee = employee;
         this.plant = plant;
-        this.dumpsters = dumpsters;
+        this.dumpster = dumpster;
         this.totalContainers = totalContainers;
         this.date = assignmentDate;
     }
 
-    public Long getId() { return id; }
     public Employee getEmployee() { return employee; }
     public RecyclingPlant getPlant() { return plant; }
-    public List<Dumpster> getDumpsters() { return dumpsters; }
+    public Dumpster getDumpsters() { return dumpster; }
     public int getTotalContainers() { return totalContainers; }
     public LocalDate getAssignmentDate() { return date; }
 }

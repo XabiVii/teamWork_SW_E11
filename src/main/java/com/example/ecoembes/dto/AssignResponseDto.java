@@ -9,8 +9,6 @@ import com.example.ecoembes.entity.Employee;
 public class AssignResponseDto {
     private Long plantId;
     private Long employeeId;
-    private int dumpsterCount;
-    private int totalContainers;
     private LocalDate date;
 
     public Long getPlantId() {
@@ -29,22 +27,6 @@ public class AssignResponseDto {
         this.employeeId = employeeId;
     }
 
-    public int getDumpsterCount() {
-        return dumpsterCount;
-    }
-
-    public void setDumpsterCount(int dumpsterCount) {
-        this.dumpsterCount = dumpsterCount;
-    }
-
-    public int getTotalContainers() {
-        return totalContainers;
-    }
-
-    public void setTotalContainers(int totalContainers) {
-        this.totalContainers = totalContainers;
-    }
-
     public LocalDate getDate() {
         return date;
     }
@@ -54,12 +36,10 @@ public class AssignResponseDto {
     }
 
 
-    public static AssignResponseDto map(Long plantId, List<Dumpster> dumpsters, Employee employee, LocalDate date) {
+    public static AssignResponseDto map(Long plantId, Dumpster dumpster, Employee employee, LocalDate date) {
         AssignResponseDto response = new AssignResponseDto();
         response.setPlantId(plantId);
         response.setEmployeeId(employee.getId());
-        response.setDumpsterCount(dumpsters.size());
-        response.setTotalContainers(dumpsters.stream().mapToInt(Dumpster::getCurrentFill).sum());
         response.setDate(date);
         return response;
     }

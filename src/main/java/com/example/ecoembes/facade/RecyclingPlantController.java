@@ -58,7 +58,8 @@ public class RecyclingPlantController {
     
     @PostMapping("/assignDumpsters")
     public ResponseEntity<AssignResponseDto> assignDumpstersToPlant(
-            @RequestBody AssignRequestDto request,
+            @RequestBody Long plantId,
+            @RequestBody Long dumpsterId,
             @RequestHeader("Token") @Parameter(description = "Authorization token") String token) {
 
         Employee employee = authService.getEmployeeByToken(token);
@@ -68,14 +69,14 @@ public class RecyclingPlantController {
 
         try {
         	LocalDate date = LocalDate.now();
-            List<Dumpster> dumpsters = recyclingPlantService.assignDumpstersToPlant(
-                    request.getPlantId(),
-                    request.getDumpsterIds(),
+            Dumpster dumpster = recyclingPlantService.assignDumpsterToPlant(
+            		plantId,
+            		dumpsterId,
                     date,
                     employee
             );
 
-            return new ResponseEntity<>(AssignResponseDto.map(request.getPlantId(), dumpsters, employee, date), HttpStatus.OK);
+            return new ResponseEntity<>(AssignResponseDto.map(plantId, dumpster, employee, date), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

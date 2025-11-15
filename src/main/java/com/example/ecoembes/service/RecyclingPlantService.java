@@ -50,30 +50,25 @@ public class RecyclingPlantService {
     }
 
     @Transactional
-    public List<Dumpster> assignDumpstersToPlant(Long plantId, List<Long> dumpsterIds, LocalDate date, Employee employee) {
+    public Dumpster assignDumpsterToPlant(Long plantId, Long dumpsterId, LocalDate date, Employee employee) {
         RecyclingPlant plant = recyclingPlantRepository.findById(plantId)
                 .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+        
+        Dumpster dumpster = dumpsterRepository.findById(dumpsterId)
+                .orElseThrow(() -> new IllegalArgumentException("Dumpster not found"));
 
-        List<Dumpster> dumpsters = dumpsterRepository.findAllById(dumpsterIds);
-        if (dumpsters.isEmpty()) {
-            throw new IllegalArgumentException("No dumpsters found");
-        }
-
-        int totalContainers = dumpsters.stream().mapToInt(Dumpster::getCurrentFill).sum();
-
-        if (plant.getCurrentFill() + totalContainers > plant.getCapacity()) {
+        if (plant.getCurrentFill() + dumpster.getCurrentFill() > plant.getCapacity()) {
             throw new IllegalArgumentException("Plant capacity exceeded");
         }
 
-        for (Dumpster dumpster : dumpsters) {
-            plant.assignDumpster(dumpster);
-        }
-
+        plant.assignDumpster(dumpster);
         recyclingPlantRepository.save(plant);
 
-        AssignmentRecord record = new AssignmentRecord(employee, plant, dumpsters, totalContainers, date);
+        AssignmentRecord record = new AssignmentRecord(employee, plant, dumpster,
+                dumpster.getCurrentFill(), date);
         assignmentRecordRepository.save(record);
 
-        return dumpsters;
+        return dumpster;
     }
+
 }
