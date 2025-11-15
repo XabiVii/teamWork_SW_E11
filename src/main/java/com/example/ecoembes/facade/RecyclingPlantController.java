@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ecoembes.dto.AssignRequestDto;
 import com.example.ecoembes.dto.AssignResponseDto;
 import com.example.ecoembes.entity.Employee;
 import com.example.ecoembes.entity.Dumpster;
