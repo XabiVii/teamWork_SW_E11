@@ -2,22 +2,22 @@ package com.example.ecoembes.dto;
 
 public class AssignRequestDto {
 
-    private Long plantId;
+    private String plantName;
     private Long dumpsterId;
 
     public AssignRequestDto() {}
 
-    public AssignRequestDto(Long plantId, Long dumpsterId) {
-        this.plantId = plantId;
+    public AssignRequestDto(String plantName, Long dumpsterId) {
+        this.plantName = plantName;
         this.dumpsterId = dumpsterId;
     }
 
-    public Long getPlantId() {
-        return plantId;
+    public String getPlantName() {
+        return plantName;
     }
 
-    public void setPlantId(Long plantId) {
-        this.plantId = plantId;
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
     }
 
     public Long getDumpsterId() {

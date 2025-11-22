@@ -73,7 +73,7 @@ public class DumpsterDto {
         this.fillLevel = fillLevel;
     }
 
-    public static DumpsterDto Map(Dumpster dumpster) {
+    public static DumpsterDto map(Dumpster dumpster) {
         return new DumpsterDto(
                 dumpster.getId(),
                 dumpster.getAddress(),
@@ -84,7 +84,7 @@ public class DumpsterDto {
         );
     }
 
-    public Dumpster Map() {
+    public Dumpster map() {
         return new Dumpster(
     	    this.id,
 	        this.address,
@@ -94,10 +94,10 @@ public class DumpsterDto {
         );
     }
 
-    public static List<DumpsterDto> Map(List<Dumpster> dumpsters) {
+    public static List<DumpsterDto> map(List<Dumpster> dumpsters) {
         List<DumpsterDto> dumpstersDto = new ArrayList<>();
         for (Dumpster dumpster : dumpsters) {
-            dumpstersDto.add(Map(dumpster));
+            dumpstersDto.add(map(dumpster));
         }
         return dumpstersDto;
     }

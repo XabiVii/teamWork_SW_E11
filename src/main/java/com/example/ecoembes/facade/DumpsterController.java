@@ -50,7 +50,7 @@ public class DumpsterController {
     		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     	}    
     	List<Dumpster> dumpsters = dumpsterService.getAllDumpsters();
-        return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
+        return new ResponseEntity<>(DumpsterDto.map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }  
 
     // create new Dumpster
@@ -66,8 +66,8 @@ public class DumpsterController {
 	    	if (employee == null) {
 	    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	    	}
-            Dumpster createDumpster = dumpsterService.createDumpster(dumpster.Map());
-            return new ResponseEntity<>(DumpsterDto.Map(createDumpster), HttpStatus.OK);
+            Dumpster createDumpster = dumpsterService.createDumpster(dumpster.map());
+            return new ResponseEntity<>(DumpsterDto.map(createDumpster), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -143,7 +143,7 @@ public class DumpsterController {
         List<Dumpster> dumpsters = dumpsterService.getDumpsterByPostalCodeAndDate(date, postalCode);
 
 
-        return new ResponseEntity<>(DumpsterDto.Map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
+        return new ResponseEntity<>(DumpsterDto.map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
 
 }

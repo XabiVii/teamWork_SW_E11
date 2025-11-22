@@ -42,15 +42,18 @@ public class RecyclingPlant {
     public String getAddress() { return location; }
     public void setAddress(String address) { this.location = address; }
 
-    public int getCapacity() { return maxCapacity; }
-    public void setCapacity(int capacity) { this.maxCapacity = capacity; }
+    public int getMaxCapacity() { return maxCapacity; }
+    public void setMaxCapacity(int capacity) { this.maxCapacity = capacity; }
 
     public int getCurrentFill() { return currentFill; }
     public void setCurrentFill(int currentFill) { this.currentFill = currentFill; }
 
-    public List<Dumpster> getAssignedDumpsters() { return assignedDumpsters; }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public void setAssignedDumpsters(List<Dumpster> assignedDumpsters) {
+    public List<Dumpster> getAssignments() { return assignedDumpsters; }
+
+    public void setAssignments(List<Dumpster> assignedDumpsters) {
         this.assignedDumpsters = assignedDumpsters;
         updateCurrentFill();
     }

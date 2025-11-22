@@ -1,81 +1,43 @@
 package com.example.ecoembes.service;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.ecoembes.dao.AssignmentRecordRepository;
 import com.example.ecoembes.dao.DumpsterRepository;
-import com.example.ecoembes.dao.RecyclingPlantRepository;
-import com.example.ecoembes.dao.UsageRecordRepository;
+import com.example.ecoembes.dto.AssignResponseDto;
+import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
-import com.example.ecoembes.entity.Employee;
-import com.example.ecoembes.entity.RecyclingPlant;
-import com.example.ecoembes.entity.UsageRecord;
+import com.example.ecoembes.gateway.IPlantGateway;
+import com.example.ecoembes.gateway.PlantGatewayFactory;
 
 @Service
 public class RecyclingPlantService {
 
-    private final RecyclingPlantRepository recyclingPlantRepository;
-    private final DumpsterRepository dumpsterRepository;
-    private final UsageRecordRepository usageRecordRepository;
-    private final AssignmentRecordRepository assignmentRecordRepository;
+	private final DumpsterRepository dumpsterRepository;
+	
+	public RecyclingPlantService(DumpsterRepository dumpsterRepository){
+		this.dumpsterRepository = dumpsterRepository;
+	}
 
-    public RecyclingPlantService(RecyclingPlantRepository recyclingPlantRepository,
-    		DumpsterRepository dumpsterRepository,
-            UsageRecordRepository usageRecordRepository,
-            AssignmentRecordRepository assignmentRecordRepository) {
-        this.recyclingPlantRepository = recyclingPlantRepository;
-        this.dumpsterRepository = dumpsterRepository;
-        this.usageRecordRepository = usageRecordRepository;
-        this.assignmentRecordRepository = assignmentRecordRepository;
+    public RecyclingPlantDto getPlant(String name) {
+        IPlantGateway gateway = PlantGatewayFactory.getGateway(name);
+        return gateway.getPlant();
     }
 
-
-    public Integer getRemainingCapacity(Long plantId, LocalDate date) {
-        RecyclingPlant plant = recyclingPlantRepository.findById(plantId).orElse(null);
-        if (plant == null) {
-            return null;
-        }
-
-        int usedCapacity = assignmentRecordRepository
-                .findByPlantIdAndDate(plantId, date)
-                .stream()
-                .mapToInt(AssignmentRecord::getTotalContainers)
-                .sum();
-
-        return plant.getCapacity() - usedCapacity;
-    }
-    
-    @Transactional
-    public Dumpster assignDumpsterToPlant(Long plantId, Long dumpsterId, LocalDate date, Employee employee) {
-        RecyclingPlant plant = recyclingPlantRepository.findById(plantId)
-                .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
-        
-        Dumpster dumpster = dumpsterRepository.findById(dumpsterId)
-                .orElseThrow(() -> new IllegalArgumentException("Dumpster not found"));
-
-        int usedCapacity = assignmentRecordRepository
-                .findByPlantIdAndDate(plantId, date)
-                .stream()
-                .mapToInt(AssignmentRecord::getTotalContainers)
-                .sum();
-
-        int remainingCapacity = plant.getCapacity() - usedCapacity;
-
-        if (dumpster.getCurrentFill() > remainingCapacity) {
-            throw new IllegalArgumentException("Plant capacity exceeded");
-        }
-
-        AssignmentRecord record = new AssignmentRecord(employee, plant, dumpster,
-                dumpster.getCurrentFill(), date);
-        assignmentRecordRepository.save(record);
-
-        return dumpster;
+    public AssignmentRecord assignDumpster(String name, Long dumpsterId, Long employeeId) {
+    	Optional<Dumpster> dumpster = dumpsterRepository.findById(dumpsterId);
+    	if (dumpster.isEmpty()) {
+    		throw new RuntimeException("Dumpster with ID " + dumpsterId + " not found");
+    	}
+        IPlantGateway gateway = PlantGatewayFactory.getGateway(name);
+        return gateway.assignDumpster(dumpsterId, employeeId, dumpster.get().getCapacity());
     }
 
-
+    public Integer getRemainingCapacity(String plantName, LocalDate date) {
+        IPlantGateway gateway = PlantGatewayFactory.getGateway(plantName);
+        return gateway.getRemainingCapacity(date);
+    }
 }

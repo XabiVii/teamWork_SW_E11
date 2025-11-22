@@ -1,14 +1,14 @@
 package com.example.ecoembes.entity;
 
 public class AssignmentRecordId {
-    private Long employee;
-    private Long plant;
-    private Long dumpster;
+    private Long employeeId;
+    private String plantName;
+    private Long dumpsterId;
 
     public AssignmentRecordId() {}
-    public AssignmentRecordId(Long employee, Long plant, Long dumpster) {
-        this.employee = employee;
-        this.plant = plant;
-        this.dumpster = dumpster;
+    public AssignmentRecordId(Long employeeId, String plantName, Long dumpsterId) {
+        this.employeeId = employeeId;
+        this.plantName = plantName;
+        this.dumpsterId = dumpsterId;
     }
 }

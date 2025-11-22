@@ -1,4 +1,4 @@
-package com.example.ecoembes.dto;
+package com.example.ecoembes.gateway.dto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,6 +36,16 @@ public class AssignResponseDto {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+
+    public static AssignmentRecord map(String plantName, Long dumpsterId, Long employeeId, LocalDate date) {
+    	AssignmentRecord record = new AssignmentRecord();
+    	record.setPlantName(plantName);
+    	record.setDumpsterId(dumpsterId);
+    	record.setEmployeeId(employeeId);
+    	record.setDate(date);
+        return record;
     }
 
 

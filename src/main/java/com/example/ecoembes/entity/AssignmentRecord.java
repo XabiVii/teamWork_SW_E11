@@ -7,21 +7,12 @@ import java.time.LocalDate;
 @Entity
 @IdClass(AssignmentRecordId.class)
 public class AssignmentRecord {
-
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
-
+    private Long employeeId;
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "plant_id")
-    private RecyclingPlant plant;
-
+    private String plantName;
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "dumspter_id")
-    private Dumpster dumpster;
+    private Long dumpsterId;
 
     private int totalContainers;
 
@@ -29,17 +20,32 @@ public class AssignmentRecord {
 
     public AssignmentRecord() {}
 
-    public AssignmentRecord(Employee employee, RecyclingPlant plant, Dumpster dumpster, int totalContainers, LocalDate assignmentDate) {
-        this.employee = employee;
-        this.plant = plant;
-        this.dumpster = dumpster;
+    public AssignmentRecord(Long employeeId, String plantName, Long dumpsterId, int totalContainers, LocalDate assignmentDate) {
+        this.employeeId = employeeId;
+        this.plantName = plantName;
+        this.dumpsterId = dumpsterId;
         this.totalContainers = totalContainers;
         this.date = assignmentDate;
     }
 
-    public Employee getEmployee() { return employee; }
-    public RecyclingPlant getPlant() { return plant; }
-    public Dumpster getDumpsters() { return dumpster; }
+    public Long getEmployeeId() { return employeeId; }
+    public String getPlantName() { return plantName; }
+    public Long getDumpsterId() { return dumpsterId; }
     public int getTotalContainers() { return totalContainers; }
-    public LocalDate getAssignmentDate() { return date; }
+    public LocalDate getDate() { return date; }
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
+    }
+    public void setDumpsterId(Long dumpsterId) {
+        this.dumpsterId = dumpsterId;
+    }
+    public void setTotalContainers(int totalContainers) {
+        this.totalContainers = totalContainers;
+    }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }

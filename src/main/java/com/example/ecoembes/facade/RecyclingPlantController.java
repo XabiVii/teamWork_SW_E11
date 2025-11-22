@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ecoembes.dto.AssignRequestDto;
 import com.example.ecoembes.dto.AssignResponseDto;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.service.AuthService;
 import com.example.ecoembes.service.RecyclingPlantService;
@@ -35,10 +36,10 @@ public class RecyclingPlantController {
         this.recyclingPlantService = recyclingPlantService;
     }
     
-    @GetMapping("/{plantId}/capacity")
+    @GetMapping("/{plantName}/capacity")
     public ResponseEntity<Integer> getPlantCapacity(
             @RequestHeader("Token") String token,
-            @PathVariable("plantId") Long plantId,
+            @PathVariable("plantName") String plantName,
             @RequestParam("date") @Parameter(description = "date (yyyy-MM-dd)", required = true, example = "2025-10-30") LocalDate date) {
 
         Employee employee = authService.getEmployeeByToken(token);
@@ -47,7 +48,7 @@ public class RecyclingPlantController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Integer remainingCapacity = recyclingPlantService.getRemainingCapacity(plantId, date);
+        Integer remainingCapacity = recyclingPlantService.getRemainingCapacity(plantName, date);
         if (remainingCapacity == null) {
             return ResponseEntity.notFound().build();
         }
@@ -66,15 +67,13 @@ public class RecyclingPlantController {
         }
 
         try {
-        	LocalDate date = LocalDate.now();
-            Dumpster dumpster = recyclingPlantService.assignDumpsterToPlant(
-            		request.getPlantId(),
+            AssignmentRecord record = recyclingPlantService.assignDumpster(
+            		request.getPlantName(),
             		request.getDumpsterId(),
-                    date,
-                    employee
+                    employee.getId()
             );
 
-            return new ResponseEntity<>(AssignResponseDto.map(request.getPlantId(), dumpster.getId(), employee, date), HttpStatus.OK);
+            return new ResponseEntity<>(AssignResponseDto.map(record), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
