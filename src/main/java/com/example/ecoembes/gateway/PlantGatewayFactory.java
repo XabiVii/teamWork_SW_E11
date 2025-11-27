@@ -11,7 +11,7 @@ public class PlantGatewayFactory {
         return cache.computeIfAbsent(name, key -> {
             switch (key.toLowerCase()) {
                 case "contsocket":
-                    return ConSocketPlantGateway.getInstance();
+                    return ConSocketGateway.getInstance();
                 case "plassb":
                     return PlasSBGateway.getInstance();
                 default:

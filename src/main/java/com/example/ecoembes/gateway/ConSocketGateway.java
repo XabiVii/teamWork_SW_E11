@@ -11,22 +11,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class ConSocketPlantGateway implements IPlantGateway {
+public class ConSocketGateway implements IPlantGateway {
 
-    private static ConSocketPlantGateway instance;
+    private static ConSocketGateway instance;
 
     private final String host = "localhost";
     private final int port = 8081;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ConSocketPlantGateway() {
+    private ConSocketGateway() {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    public static synchronized ConSocketPlantGateway getInstance() {
+    public static synchronized ConSocketGateway getInstance() {
         if (instance == null) {
-            instance = new ConSocketPlantGateway();
+            instance = new ConSocketGateway();
         }
         return instance;
     }
