@@ -1,9 +1,13 @@
 package com.example.ecoembes.gateway;
 
 import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 import java.net.Socket;
 
+import org.springframework.beans.factory.annotation.Value;
 import com.example.ecoembes.gateway.dto.AssignResponseDto;
 import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.AssignmentRecord;
@@ -11,24 +15,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+@Component("contsocket")
 public class ConSocketGateway implements IPlantGateway {
 
-    private static ConSocketGateway instance;
+    private final String host;
+    private final int port;
+    private final ObjectMapper objectMapper;
 
-    private final String host = "localhost";
-    private final int port = 8081;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private ConSocketGateway() {
+    public ConSocketGateway(
+            @Value("${consocket.host}") String host,
+            @Value("${consocket.port}") int port) {
+        this.host = host;
+        this.port = port;
+        objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    }
-
-    public static synchronized ConSocketGateway getInstance() {
-        if (instance == null) {
-            instance = new ConSocketGateway();
-        }
-        return instance;
     }
 
     private String sendCommand(String cmd) throws IOException {

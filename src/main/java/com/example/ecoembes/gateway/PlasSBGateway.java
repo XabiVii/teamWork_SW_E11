@@ -2,6 +2,8 @@ package com.example.ecoembes.gateway;
 
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -10,23 +12,16 @@ import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.gateway.dto.AssignRequestDto;
 
+@Component("plassb")
 public class PlasSBGateway implements IPlantGateway {
-	
-	private static PlasSBGateway instance;
 
-    private final String baseUrl = "http://localhost:8080";
+    private final String baseUrl;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private PlasSBGateway() {
+    public PlasSBGateway(@Value("${plassb.base-url}") String baseUrl) {
+        this.baseUrl = baseUrl;
     }
     
-    public static synchronized PlasSBGateway getInstance() {
-        if (instance == null) {
-            instance = new PlasSBGateway();
-        }
-        return instance;
-    }
-
     @Override
     public RecyclingPlantDto getPlant() {
         return restTemplate.getForObject(baseUrl + "/plant", RecyclingPlantDto.class);

@@ -1,22 +1,18 @@
 package com.example.ecoembes.gateway;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PlantGatewayFactory {
 
-    private static final Map<String, IPlantGateway> cache = new ConcurrentHashMap<>();
+    private final Map<String, IPlantGateway> gateways;
 
-    public static IPlantGateway getGateway(String name) {
-        return cache.computeIfAbsent(name, key -> {
-            switch (key.toLowerCase()) {
-                case "contsocket":
-                    return ConSocketGateway.getInstance();
-                case "plassb":
-                    return PlasSBGateway.getInstance();
-                default:
-                    throw new IllegalArgumentException("Unknown plant gateway: " + name);
-            }
-        });
+    public PlantGatewayFactory(Map<String, IPlantGateway> gateways) {
+        this.gateways = gateways;
+    }
+
+    public IPlantGateway getGateway(String name) {
+        return gateways.get(name.toLowerCase());
     }
 }
