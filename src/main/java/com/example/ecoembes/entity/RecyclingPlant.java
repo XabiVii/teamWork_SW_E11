@@ -8,9 +8,7 @@ import jakarta.persistence.*;
 public class RecyclingPlant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Column(unique = true, nullable = false)
     private String name;
     private int postalCode;
     private String location;
@@ -21,17 +19,13 @@ public class RecyclingPlant {
 
     public RecyclingPlant() { }
 
-    public RecyclingPlant(Long id, String name, String address, int postalCode, int capacity) {
-        this.id = id;
+    public RecyclingPlant(String name, String address, int postalCode, int capacity) {
         this.name = name;
         this.location = address;
         this.postalCode = postalCode;
         this.maxCapacity = capacity;
         this.currentFill = 0;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -82,7 +76,6 @@ public class RecyclingPlant {
     @Override
     public String toString() {
         return "RecyclingPlant{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", postalCode=" + postalCode +
                 ", address='" + location + '\'' +
