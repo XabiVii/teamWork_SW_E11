@@ -2,6 +2,8 @@ package com.example.ecoembes.gateway;
 
 import java.time.LocalDate;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -57,15 +59,13 @@ public class ConSocketGateway implements IPlantGateway {
     }
 
     @Override
-    public AssignmentRecord assignDumpster(Long dumpsterId, Long employeeId, int filling) {
+    public void assignDumpster(int totalContainer, int filling) {
         try {
-            String cmd = String.format("ADD_ASSIGNMENT;dumpsterId=%d;employeeId=%d;filling=%d", dumpsterId, employeeId, filling);
+            String cmd = String.format("ADD_ASSIGNMENT;totalDumpsters=%d;filling=%d", totalContainer, filling);
             String response = sendCommand(cmd);
-            if (response.contains("\"error\"")) {
+            if (!response.equals("200")) {
                 throw new RuntimeException("Server error: " + response);
             }
-            AssignResponseDto assignment = objectMapper.readValue(response, AssignResponseDto.class);
-            return AssignResponseDto.map("ContSocket", assignment.getDumpsterId(), assignment.getEmployeeId(), assignment.getDate());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

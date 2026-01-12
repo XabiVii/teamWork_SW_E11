@@ -1,35 +1,24 @@
 package com.example.ecoembes.gateway.dto;
 
-import com.example.ecoembes.entity.AssignmentRecord;
 
 public class AssignRequestDto {
 
-    private Long EmployeeId;
-    private Long dumpsterId;
+    private int totalDumpster;
     private int filling;
 
     public AssignRequestDto() {}
 
-    public AssignRequestDto(Long dumpsterId, Long EmployeeId, int filling) {
-        this.EmployeeId = EmployeeId;
-        this.dumpsterId = dumpsterId;
+    public AssignRequestDto(int totalDumpster, int filling) {
+        this.totalDumpster = totalDumpster;
         this.filling = filling;
     }
 
-    public Long getEmployeeId() {
-        return EmployeeId;
+    public int getTotalDumpster() {
+        return totalDumpster;
     }
 
-    public void setEmployeeId(Long EmployeeId) {
-        this.EmployeeId = EmployeeId;
-    }
-
-    public Long getDumpsterId() {
-        return dumpsterId;
-    }
-
-    public void setDumpsterId(Long dumpsterId) {
-        this.dumpsterId = dumpsterId;
+    public void setTotalDumpster(int totalDumpster) {
+        this.totalDumpster = totalDumpster;
     }
 
     public int getFilling() {
@@ -38,13 +27,5 @@ public class AssignRequestDto {
 
     public void setFilling(int filling) {
         this.filling = filling;
-    }
-
-    public static AssignmentRecord map(AssignRequestDto request) {
-    	AssignmentRecord record = new AssignmentRecord();
-    	record.setEmployeeId(request.getEmployeeId());
-    	record.setDumpsterId(request.getDumpsterId());
-    	record.setTotalContainers(request.getFilling());
-        return record;
     }
 }

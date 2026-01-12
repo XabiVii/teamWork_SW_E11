@@ -8,6 +8,6 @@ import com.example.ecoembes.entity.AssignmentRecord;
 
 public interface IPlantGateway {
     RecyclingPlantDto getPlant();
-    AssignmentRecord assignDumpster(Long dumpsterId, Long employeeId, int filling);
+    void assignDumpster(int totalDumpsters, int filling);
     Integer getRemainingCapacity(LocalDate date);
 }

@@ -1,15 +1,17 @@
 package com.example.ecoembes.dto;
 
+import java.util.List;
+
 public class AssignRequestDto {
 
     private String plantName;
-    private Long dumpsterId;
+    private List<Long> dumpsterIds;
 
     public AssignRequestDto() {}
 
-    public AssignRequestDto(String plantName, Long dumpsterId) {
+    public AssignRequestDto(String plantName, List<Long> dumpsterId) {
         this.plantName = plantName;
-        this.dumpsterId = dumpsterId;
+        this.dumpsterIds = dumpsterId;
     }
 
     public String getPlantName() {
@@ -20,11 +22,13 @@ public class AssignRequestDto {
         this.plantName = plantName;
     }
 
-    public Long getDumpsterId() {
-        return dumpsterId;
+    public List<Long> getDumpsterIds() {
+        return dumpsterIds;
     }
 
-    public void setDumpsterId(Long dumpsterId) {
-        this.dumpsterId = dumpsterId;
+    public void setDumpsterIds(List<Long> dumpsterId) {
+        this.dumpsterIds = dumpsterId;
     }
+    
+    
 }

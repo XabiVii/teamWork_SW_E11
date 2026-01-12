@@ -29,14 +29,13 @@ public class PlasSBGateway implements IPlantGateway {
     }
 
     @Override
-    public AssignmentRecord assignDumpster(Long dumpsterId, Long employeeId, int filling) {
-        AssignRequestDto request = new AssignRequestDto(dumpsterId, employeeId, filling);
+    public void assignDumpster(int totalDumpster, int filling) {
+        AssignRequestDto request = new AssignRequestDto(totalDumpster, filling);
     	String url = UriComponentsBuilder
                 .fromUriString(baseUrl)
                 .path("/recyclingPlant/assignDumpster")
                 .toUriString();
-        AssignResponseDto response = restTemplate.postForObject(url, request, AssignResponseDto.class);
-        return AssignResponseDto.map("PlasSB", response.getDumpsterId(), response.getEmployeeId(), response.getDate());
+        restTemplate.postForObject(url, request, AssignResponseDto.class);
     }
 
     @Override

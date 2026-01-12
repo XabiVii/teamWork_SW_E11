@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.EmployeeRepository;
 import com.example.ecoembes.dao.UsageRecordRepository;
+import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.UsageRecord;
 
 @Component
@@ -30,18 +32,18 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+    	
+    	RecyclingPlant r1 = new RecyclingPlant("ContSocket", "Bilbao", 48010, 5000);
 
         Dumpster d1 = new Dumpster(null, "Calle Mayor 12, Bilbao", 48005, 1000, 750);
-
-        Dumpster d2 = new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 400);
-
+        Dumpster d2 = new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 300);
         Dumpster d3 = new Dumpster(null, "Calle Autonomía 200, Bilbao", 48012, 800, 800);
-
-        Dumpster d4 = new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 150);
-
+        Dumpster d4 = new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 100);
         Dumpster d5 = new Dumpster(null, "Gran Vía 15, Bilbao", 48009, 1100, 950);
-
         dumpsterRepository.saveAll(Arrays.asList(d1, d2, d3, d4, d5));
+
+        AssignmentRecord a1 = new AssignmentRecord(1L, r1.getName(), d4.getId(), 1, LocalDate.now().minusDays(3));
+        AssignmentRecord a2 = new AssignmentRecord(1L, r1.getName(), d2.getId(), 1, LocalDate.now());
 
         employeeRepository.saveAll(Arrays.asList(
             new Employee(null, "Ana López", "ana.lopez@ecoembes.com", "password123"),

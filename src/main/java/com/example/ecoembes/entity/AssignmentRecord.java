@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @IdClass(AssignmentRecordId.class)
 public class AssignmentRecord {
 	@Id
-    private Long employeeId;
+    private LocalDate date;
 	@Id
     private String plantName;
 	@Id
@@ -16,7 +16,7 @@ public class AssignmentRecord {
 
     private int totalContainers;
 
-    private LocalDate date;
+    private Long employeeId;
 
     public AssignmentRecord() {}
 

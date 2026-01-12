@@ -67,13 +67,13 @@ public class RecyclingPlantController {
         }
 
         try {
-            AssignmentRecord record = recyclingPlantService.assignDumpster(
+            	recyclingPlantService.assignDumpster(
             		request.getPlantName(),
-            		request.getDumpsterId(),
+            		request.getDumpsterIds(),
                     employee.getId()
             );
 
-            return new ResponseEntity<>(AssignResponseDto.map(record), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
