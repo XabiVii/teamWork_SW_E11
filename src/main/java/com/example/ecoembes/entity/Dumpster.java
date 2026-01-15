@@ -2,6 +2,8 @@ package com.example.ecoembes.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Dumpster {
@@ -16,9 +18,8 @@ public class Dumpster {
     private String fillLevel;
     private String location;
 
-    @ManyToOne
-    @JoinColumn(name = "recycling_plant_id")
-    private RecyclingPlant assignedPlant;
+    @OneToMany(mappedBy = "dumpster", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AssignmentRecord> assignments = new ArrayList<>();
 
     public Dumpster() { }
 
@@ -47,7 +48,6 @@ public class Dumpster {
     public void setPostalCode(int postalCode) { this.postalCode = postalCode; }
 
     public String getFillLevel() { return fillLevel; }
-    public void setFillLevel(String fillLevel) { this.fillLevel = fillLevel; }
 
     public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) { this.capacity = capacity; }
@@ -57,17 +57,25 @@ public class Dumpster {
         this.currentFill = currentFill;
         calculateFillLevel();
     }
-    
-    public void setAssignedPlant(RecyclingPlant assignedPlant) {
-        this.assignedPlant = assignedPlant;
-    }
-    
+
+    public List<AssignmentRecord> getAssignments() { return assignments; }
+    public void setAssignments(List<AssignmentRecord> assignments) { this.assignments = assignments; }
+    public void addAssignments(AssignmentRecord assignment) { this.assignments.add(assignment); }
+
     public void calculateFillLevel() {
         switch ((int) ((double) this.currentFill * 3 / this.capacity)) {
             case 0 -> this.fillLevel = "GREEN";
             case 1 -> this.fillLevel = "ORANGE";
             case 2, 3 -> this.fillLevel = "RED";
         }
+    }
+
+    public AssignmentRecord getAssignmentAt(LocalDate date) {
+        return assignments.stream()
+                .filter(a -> !a.getDate().isAfter(date))
+                .sorted((a,b) -> b.getDate().compareTo(a.getDate()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -77,7 +85,6 @@ public class Dumpster {
                 ", address='" + location + '\'' +
                 ", postalCode=" + postalCode +
                 ", fillLevel='" + fillLevel + '\'' +
-                ", assignedPlant=" + (assignedPlant != null ? assignedPlant.getName() : "none") +
                 '}';
     }
 }

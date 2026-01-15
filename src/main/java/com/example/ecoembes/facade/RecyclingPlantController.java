@@ -2,6 +2,7 @@ package com.example.ecoembes.facade;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecoembes.dto.AssignRequestDto;
 import com.example.ecoembes.dto.AssignResponseDto;
+import com.example.ecoembes.dto.DumpsterDto;
+import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.service.AuthService;
@@ -34,6 +38,21 @@ public class RecyclingPlantController {
     public RecyclingPlantController(RecyclingPlantService recyclingPlantService, AuthService authService) {
         this.authService = authService;
         this.recyclingPlantService = recyclingPlantService;
+    }
+
+
+    // Get all plants
+    @GetMapping
+    public ResponseEntity<List<RecyclingPlantDto>> getAllPlants(
+    	    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Authorization token in plain text", required = true)
+    	    @RequestHeader("Token") String token) {    
+    	Employee employee = authService.getEmployeeByToken(token);
+    	
+    	if (employee == null) {
+    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    	}
+    	Map<RecyclingPlant, List<Dumpster>> plants = recyclingPlantService.getAvailablePlants();
+        return new ResponseEntity<>(RecyclingPlantDto.map(plants), plants.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
     
     @GetMapping("/{plantName}/capacity")

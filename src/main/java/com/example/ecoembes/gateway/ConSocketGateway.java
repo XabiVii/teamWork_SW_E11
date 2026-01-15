@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.example.ecoembes.gateway.dto.AssignResponseDto;
 import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.AssignmentRecord;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -49,10 +50,10 @@ public class ConSocketGateway implements IPlantGateway {
     }
 
     @Override
-    public RecyclingPlantDto getPlant() {
+    public RecyclingPlant getPlant() {
         try {
             String response = sendCommand("PLANT");
-            return objectMapper.readValue(response, RecyclingPlantDto.class);
+            return objectMapper.readValue(response, RecyclingPlantDto.class).map();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

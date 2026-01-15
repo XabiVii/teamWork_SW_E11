@@ -15,4 +15,9 @@ public class PlantGatewayFactory {
     public IPlantGateway getGateway(String name) {
         return gateways.get(name.toLowerCase());
     }
+    
+    public Map<String, IPlantGateway> getAllGateways() {
+        return gateways;
+    }
 }
+	

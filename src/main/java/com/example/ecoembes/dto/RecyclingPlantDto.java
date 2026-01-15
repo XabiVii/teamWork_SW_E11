@@ -2,7 +2,9 @@ package com.example.ecoembes.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.RecyclingPlant;
 
 public class RecyclingPlantDto {
@@ -22,7 +24,6 @@ public class RecyclingPlantDto {
         this.postalCode = postalCode;
         this.maxCapacity = maxCapacity;
         this.currentFill = currentFill;
-        this.currentFill = currentFill;
     }
 
     public RecyclingPlantDto(String name, String location, int postalCode, int maxCapacity, int currentFill, List<DumpsterDto> assignments) {
@@ -31,10 +32,10 @@ public class RecyclingPlantDto {
         this.postalCode = postalCode;
         this.maxCapacity = maxCapacity;
         this.currentFill = currentFill;
-        this.currentFill = currentFill;
         this.assignments = assignments;
     }
 
+    // --- Getters / Setters ---
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
@@ -51,16 +52,52 @@ public class RecyclingPlantDto {
     public void setCurrentFill(int currentFill) { this.currentFill = currentFill; }
 
     public List<DumpsterDto> getAssignments() { return assignments; }
-    public void addAssignment(DumpsterDto assignments) { this.assignments.add(assignments); }
+    public void addAssignment(DumpsterDto assignment) { this.assignments.add(assignment); }
+
+    public RecyclingPlant map() {
+        return new RecyclingPlant(
+            this.getName(),
+            this.getLocation(),
+            this.getPostalCode(),
+            this.getMaxCapacity(),
+            this.getCurrentFill()
+        );
+    }
 
     public static RecyclingPlantDto map(RecyclingPlant plant) {
-    	return new RecyclingPlantDto(
+        return new RecyclingPlantDto(
             plant.getName(),
             plant.getLocation(),
             plant.getPostalCode(),
             plant.getMaxCapacity(),
-            plant.getCurrentFill(),
-            DumpsterDto.map(plant.getAssignments())
+            plant.getCurrentFill()
         );
+    }
+
+    public static List<RecyclingPlantDto> map(Map<RecyclingPlant, List<Dumpster>> plantToDumpsters) {
+        List<RecyclingPlantDto> dtoList = new ArrayList<>();
+
+        for (Map.Entry<RecyclingPlant, List<Dumpster>> entry : plantToDumpsters.entrySet()) {
+            RecyclingPlant plant = entry.getKey();
+            List<Dumpster> dumpsters = entry.getValue();
+
+            List<DumpsterDto> dumpsterDtos = new ArrayList<>();
+            for (Dumpster dumpster : dumpsters) {
+                dumpsterDtos.add(DumpsterDto.map(dumpster));
+            }
+
+            RecyclingPlantDto dto = new RecyclingPlantDto(
+                plant.getName(),
+                plant.getLocation(),
+                plant.getPostalCode(),
+                plant.getMaxCapacity(),
+                plant.getCurrentFill(),
+                dumpsterDtos
+            );
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 }

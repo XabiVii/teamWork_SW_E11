@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.example.ecoembes.gateway.dto.AssignResponseDto;
 import com.example.ecoembes.dto.RecyclingPlantDto;
 import com.example.ecoembes.entity.AssignmentRecord;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.gateway.dto.AssignRequestDto;
 
 @Component("plassb")
@@ -23,8 +24,8 @@ public class PlasSBGateway implements IPlantGateway {
     }
     
     @Override
-    public RecyclingPlantDto getPlant() {
-        return restTemplate.getForObject(baseUrl + "/plant", RecyclingPlantDto.class);
+    public RecyclingPlant getPlant() {
+        return restTemplate.getForObject(baseUrl + "/recyclingPlant", RecyclingPlantDto.class).map();
 
     }
 

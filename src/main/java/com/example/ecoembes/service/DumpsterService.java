@@ -3,18 +3,23 @@ package com.example.ecoembes.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.ecoembes.dao.AssignmentRepository;
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.EmployeeRepository;
 import com.example.ecoembes.dao.UsageRecordRepository;
+import com.example.ecoembes.entity.AssignmentRecord;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.UsageRecord;
 
 @Service
@@ -23,18 +28,53 @@ public class DumpsterService {
     private final DumpsterRepository dumpsterRepository;
     private final UsageRecordRepository usageRecordRepository;
     private final EmployeeRepository employeeRepository;
+    private final AssignmentRepository assignmentRepository;
+    private final RecyclingPlantService plantService;
     private final EmailService emailService;
 
-    public DumpsterService(DumpsterRepository repository, UsageRecordRepository usageRecordRepository, EmployeeRepository employeeRepository, EmailService emailService) {
+    public DumpsterService(DumpsterRepository repository, UsageRecordRepository usageRecordRepository, EmployeeRepository employeeRepository, AssignmentRepository assignmentRepository, RecyclingPlantService plantService, EmailService emailService) {
         this.dumpsterRepository = repository;
         this.usageRecordRepository = usageRecordRepository;
         this.employeeRepository = employeeRepository;
+        this.assignmentRepository = assignmentRepository;
+        this.plantService = plantService;
         this.emailService = emailService;
     }
 
-    public List<Dumpster> getAllDumpsters() {
-        return dumpsterRepository.findAll();
+    public Map<Dumpster, RecyclingPlant> getAllDumpsters() {
+        List<Dumpster> dumpsters = dumpsterRepository.findAll();
+        List<RecyclingPlant> plants = new ArrayList<>(plantService.getAvailablePlants().keySet());
+
+        Map<Dumpster, RecyclingPlant> dumpsterPlantMap = new HashMap<>();
+
+        for (Dumpster dumpster : dumpsters) {
+            AssignmentRecord todayAssignment = dumpster.getAssignments().stream()
+                    .filter(a -> a.getDate().isEqual(LocalDate.now()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (todayAssignment != null) {
+                RecyclingPlant assignedPlant = plants.stream()
+                		.filter(p -> p.getName().toLowerCase().equals(todayAssignment.getPlantName().toLowerCase()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (assignedPlant != null) {
+                    dumpsterPlantMap.put(dumpster, assignedPlant);
+                }
+                else {
+                	dumpsterPlantMap.put(dumpster, null);
+                }
+            }
+            else {
+            	dumpsterPlantMap.put(dumpster, null);
+            }
+        }
+
+        return dumpsterPlantMap;
     }
+
+
 
     public Optional<Dumpster> getDumpsterById(Long id) {
         return dumpsterRepository.findById(id);
@@ -77,15 +117,12 @@ public class DumpsterService {
                     .findFirst();
 
             int latestFill;
-            String fillLevel;
 
             if (recordOpt.isPresent()) {
                 UsageRecord record = recordOpt.get();
                 latestFill = record.getEstimatedNumCont();
-                fillLevel = record.getFillLevel();
             } else {
                 latestFill = dumpster.getCurrentFill();
-                fillLevel = dumpster.getFillLevel();
             }
 
             Dumpster updatedDumpster = new Dumpster(
@@ -96,7 +133,6 @@ public class DumpsterService {
                     latestFill
             );
             updatedDumpster.setCurrentFill(latestFill);
-            updatedDumpster.setFillLevel(fillLevel);
 
             results.add(updatedDumpster);
         }

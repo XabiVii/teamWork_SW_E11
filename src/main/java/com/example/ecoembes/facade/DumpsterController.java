@@ -2,6 +2,7 @@ package com.example.ecoembes.facade;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import com.example.ecoembes.dto.DumpsterDto;
 import com.example.ecoembes.dto.UsageRecordDto;
 import com.example.ecoembes.entity.Dumpster;
 import com.example.ecoembes.entity.Employee;
+import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.UsageRecord;
 import com.example.ecoembes.service.AuthService;
 import com.example.ecoembes.service.DumpsterService;
@@ -49,7 +51,7 @@ public class DumpsterController {
     	if (employee == null) {
     		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     	}    
-    	List<Dumpster> dumpsters = dumpsterService.getAllDumpsters();
+    	Map<Dumpster, RecyclingPlant> dumpsters = dumpsterService.getAllDumpsters();
         return new ResponseEntity<>(DumpsterDto.map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }  
 

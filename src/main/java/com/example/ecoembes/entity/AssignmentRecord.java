@@ -18,34 +18,34 @@ public class AssignmentRecord {
 
     private Long employeeId;
 
+    @ManyToOne
+    @JoinColumn(name = "dumpsterId", referencedColumnName = "id", insertable = false, updatable = false)
+    private Dumpster dumpster;
+
     public AssignmentRecord() {}
 
-    public AssignmentRecord(Long employeeId, String plantName, Long dumpsterId, int totalContainers, LocalDate assignmentDate) {
+    public AssignmentRecord(Long employeeId, String plantName, Long dumpsterId, int totalContainers, LocalDate date) {
         this.employeeId = employeeId;
         this.plantName = plantName;
         this.dumpsterId = dumpsterId;
         this.totalContainers = totalContainers;
-        this.date = assignmentDate;
+        this.date = date;
     }
 
     public Long getEmployeeId() { return employeeId; }
+    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+
     public String getPlantName() { return plantName; }
+    public void setPlantName(String plantName) { this.plantName = plantName; }
+
     public Long getDumpsterId() { return dumpsterId; }
+    public void setDumpsterId(Long dumpsterId) { this.dumpsterId = dumpsterId; }
+
     public int getTotalContainers() { return totalContainers; }
+    public void setTotalContainers(int totalContainers) { this.totalContainers = totalContainers; }
+
     public LocalDate getDate() { return date; }
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
-    }
-    public void setPlantName(String plantName) {
-        this.plantName = plantName;
-    }
-    public void setDumpsterId(Long dumpsterId) {
-        this.dumpsterId = dumpsterId;
-    }
-    public void setTotalContainers(int totalContainers) {
-        this.totalContainers = totalContainers;
-    }
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+    public void setDate(LocalDate date) { this.date = date; }
+    
+    public Dumpster getDumpster() { return dumpster; }
 }
