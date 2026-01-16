@@ -41,9 +41,9 @@ public class DatabaseInitializer implements CommandLineRunner {
     	RecyclingPlant r2 = new RecyclingPlant("ContSocket", "Bilbao", 48010, 5000);
 
         Dumpster d1 = new Dumpster(null, "Calle Mayor 12, Bilbao", 48005, 1000, 750);
-        Dumpster d2 = new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 300);
+        Dumpster d2 = new Dumpster(null, "Avenida Sabino Arana 45, Bilbao", 48013, 1200, 1100);
         Dumpster d3 = new Dumpster(null, "Calle Autonomía 200, Bilbao", 48012, 800, 800);
-        Dumpster d4 = new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 100);
+        Dumpster d4 = new Dumpster(null, "Calle Licenciado Poza 89, Bilbao", 48011, 900, 900);
         Dumpster d5 = new Dumpster(null, "Gran Vía 15, Bilbao", 48009, 1100, 950);
         dumpsterRepository.saveAll(Arrays.asList(d1, d2, d3, d4, d5));
 
@@ -56,7 +56,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         employeeRepository.saveAll(Arrays.asList(
             new Employee(null, "Ana López", "ana.lopez@ecoembes.com", "password123"),
-            new Employee(null, "Carlos García", "carlos.garcia@ecoembes.com", "securePass")
+            new Employee(null, "Carlos García", "carlos.garcia@gmail.com", "securePass")
         ));
 
         usageRecordRepository.saveAll(Arrays.asList(

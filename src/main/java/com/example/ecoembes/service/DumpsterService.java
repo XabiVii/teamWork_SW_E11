@@ -2,8 +2,6 @@ package com.example.ecoembes.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.ecoembes.dao.AssignmentRepository;
 import com.example.ecoembes.dao.DumpsterRepository;
 import com.example.ecoembes.dao.EmployeeRepository;
 import com.example.ecoembes.dao.UsageRecordRepository;
@@ -151,18 +148,20 @@ public class DumpsterService {
         if (percentage >= 80.0) {
         	List<Employee> recipients = employeeRepository.findAll();
 
-            String subject = "Ecoembes Alert: High Dumpster Saturation";
             String body = String.format("""
-                Attention!  
-				%.2f%% of the dumpsters are currently full or nearly full (ORANGE/RED).  
-				Please arrange a collection as soon as possible.
-                """, percentage);
+            Warning !  
+			%.2f%% of the dumpsters are currently full or nearly full (ORANGE/RED).  
+			Please arrange a collection as soon as possible.
+            """, percentage);
 
             List<String> emails = recipients.stream()
                     .map(Employee::getEmail)
                     .toList();
             
-            emailService.sendEmail(subject, body, emails.toArray(new String[0]));
+            for (String email : emails) {
+                emailService.sendSimpleMessage(email, body);
+            }
+
         }
     }
 
