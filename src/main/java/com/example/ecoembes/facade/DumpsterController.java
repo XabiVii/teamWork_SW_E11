@@ -144,7 +144,6 @@ public class DumpsterController {
         
         List<Dumpster> dumpsters = dumpsterService.getDumpsterByPostalCodeAndDate(date, postalCode);
 
-
         return new ResponseEntity<>(DumpsterDto.map(dumpsters), dumpsters.isEmpty() ? HttpStatus.NO_CONTENT: HttpStatus.OK);
     }
 

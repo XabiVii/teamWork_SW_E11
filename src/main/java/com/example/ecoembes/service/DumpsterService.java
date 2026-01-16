@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,15 +29,13 @@ public class DumpsterService {
     private final DumpsterRepository dumpsterRepository;
     private final UsageRecordRepository usageRecordRepository;
     private final EmployeeRepository employeeRepository;
-    private final AssignmentRepository assignmentRepository;
     private final RecyclingPlantService plantService;
     private final EmailService emailService;
 
-    public DumpsterService(DumpsterRepository repository, UsageRecordRepository usageRecordRepository, EmployeeRepository employeeRepository, AssignmentRepository assignmentRepository, RecyclingPlantService plantService, EmailService emailService) {
+    public DumpsterService(DumpsterRepository repository, UsageRecordRepository usageRecordRepository, EmployeeRepository employeeRepository, RecyclingPlantService plantService, EmailService emailService) {
         this.dumpsterRepository = repository;
         this.usageRecordRepository = usageRecordRepository;
         this.employeeRepository = employeeRepository;
-        this.assignmentRepository = assignmentRepository;
         this.plantService = plantService;
         this.emailService = emailService;
     }
@@ -45,7 +44,7 @@ public class DumpsterService {
         List<Dumpster> dumpsters = dumpsterRepository.findAll();
         List<RecyclingPlant> plants = new ArrayList<>(plantService.getAvailablePlants().keySet());
 
-        Map<Dumpster, RecyclingPlant> dumpsterPlantMap = new HashMap<>();
+        Map<Dumpster, RecyclingPlant> dumpsterPlantMap = new LinkedHashMap<>();
 
         for (Dumpster dumpster : dumpsters) {
             AssignmentRecord todayAssignment = dumpster.getAssignments().stream()
