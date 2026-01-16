@@ -83,6 +83,9 @@ public class DumpsterService {
 
     public Optional<Dumpster> updateDumpsterInfo(Long id, int currentFill) {
         return dumpsterRepository.findById(id).map(dumpster -> {
+            if (dumpster.getCapacity() < currentFill) {
+                throw new RuntimeException("not enough capacity");
+            }
             dumpster.setCurrentFill(currentFill);
             dumpster.calculateFillLevel();
             Dumpster savedDumpster =  dumpsterRepository.save(dumpster);
