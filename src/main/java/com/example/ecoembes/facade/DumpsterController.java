@@ -25,6 +25,7 @@ import com.example.ecoembes.entity.RecyclingPlant;
 import com.example.ecoembes.entity.UsageRecord;
 import com.example.ecoembes.service.AuthService;
 import com.example.ecoembes.service.DumpsterService;
+import com.example.ecoembes.service.EmailService;
 
 import io.swagger.v3.oas.annotations.Parameter;
 
@@ -34,10 +35,13 @@ public class DumpsterController {
 
     private final DumpsterService dumpsterService;
 	private final AuthService authService;
+	private final EmailService emailService;
 
-    public DumpsterController(DumpsterService dumpsterService, AuthService authService) {
+    public DumpsterController(DumpsterService dumpsterService, AuthService authService, EmailService emailService) {
         this.dumpsterService = dumpsterService;
 		this.authService = authService;
+	    this.emailService = emailService;
+
     }
 
 
@@ -68,12 +72,21 @@ public class DumpsterController {
 	    	if (employee == null) {
 	    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	    	}
-            Dumpster createDumpster = dumpsterService.createDumpster(dumpster.map());
-            return new ResponseEntity<>(DumpsterDto.map(createDumpster), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+	    	Dumpster createDumpster = dumpsterService.createDumpster(dumpster.map());
+
+	    	
+	       emailService.sendSimpleMessage(
+	            employee.getEmail(),
+	            "Se ha creado un nuevo contenedor: " + createDumpster.getAddress()
+	        );
+
+	        return new ResponseEntity<>(DumpsterDto.map(createDumpster), HttpStatus.OK);
+
+
+	    } catch (IllegalArgumentException e) {
+	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+	}
     
     // update dumpster info
     @PutMapping("/{DumpsterId}/dump_info")

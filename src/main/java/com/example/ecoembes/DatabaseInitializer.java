@@ -56,7 +56,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
         employeeRepository.saveAll(Arrays.asList(
             new Employee(null, "Ana López", "ana.lopez@ecoembes.com", "password123"),
-            new Employee(null, "Carlos García", "carlos.garcia@gmail.com", "securePass")
+            new Employee(null, "Carlos García", "carlos.garcia@gmail.com", "securePass"),
+            new Employee(null, "Samantha Muñoz", "samantha.munoz@opendeusto.es", "123")
+
         ));
 
         usageRecordRepository.saveAll(Arrays.asList(
